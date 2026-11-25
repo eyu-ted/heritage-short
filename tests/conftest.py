@@ -23,6 +23,21 @@ def storyboard(repo):
 
 
 @pytest.fixture
+def refs_repo(repo):
+    """The repo copy with a tiny approved image for every reference (the reference sheet done)."""
+    from PIL import Image
+
+    sb = json.loads(repo.storyboard.read_text(encoding="utf-8"))
+    for n, ref in enumerate(sb["references"]):
+        path = repo.outputs / "refs" / f"{ref['id']}-opt1__test.jpg"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        Image.new("RGB", (32, 32), (40 * n, 60, 90)).save(path)
+        ref["image"] = path.relative_to(repo.root).as_posix()
+    repo.storyboard.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    return repo
+
+
+@pytest.fixture
 def blank_repo(repo):
     """The repo copy with every Amharic line emptied (the state before the script is written)."""
     sb = json.loads(repo.storyboard.read_text(encoding="utf-8"))

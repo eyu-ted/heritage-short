@@ -42,7 +42,8 @@ def test_unknown_shot_rejected(repo, capsys):
 
 
 def test_unbuilt_stage_exits_not_ready(repo, capsys):
-    assert main(["keyframes"], root=repo.root) == 2
+    assert main(["music"], root=repo.root) == 2  # the music stage arrives in Phase 5
+    assert "not available yet" in capsys.readouterr().err
 
 
 def _fake_keyframe(repo, sb, manifest, job, colour):
@@ -62,8 +63,9 @@ def _rows(out):
     return rows
 
 
-def test_only_changed_shot_is_invalidated(repo, capsys):
+def test_only_changed_shot_is_invalidated(refs_repo, capsys):
     """The walkthrough promise: change one prompt -> only that shot regenerates."""
+    repo = refs_repo
     sb = load(repo)
     manifest = Manifest(repo)
     for job in keyframe_jobs(sb, manifest):
@@ -80,7 +82,8 @@ def test_only_changed_shot_is_invalidated(repo, capsys):
     assert [k for k, v in rows.items() if v == "would run"] == ["s07"]
 
 
-def test_new_keyframe_changes_its_shot_hash_only(repo):
+def test_new_keyframe_changes_its_shot_hash_only(refs_repo):
+    repo = refs_repo
     sb = load(repo)
     manifest = Manifest(repo)
     for job in keyframe_jobs(sb, manifest):

@@ -2,7 +2,7 @@
 
 A 60-90 second film about my grandmother's Ethiopian coffee ceremony, narrated in **Amharic** with **English subtitles** and an original score, made by a small pipeline in code. One file, [`storyboard.json`](storyboard.json), is the contract: every stage reads it and writes its outputs, and changing one line regenerates only what depends on it.
 
-> **Status (25 Nov 2026): work in progress.** Done: engine, provider smoke test, Amharic narration, radio cut. Next: keyframes (Phase 4), moving shots and music (Kaggle), final edit. See [IMPLEMENTATION.md](IMPLEMENTATION.md).
+> **Status (25 Nov 2026): work in progress.** Done: engine, provider smoke test, Amharic narration, radio cut, reference sheet, all 10 keyframes, Ken Burns motion, vertical animatic. Next: Wan clips and music on Kaggle, final edit. See [IMPLEMENTATION.md](IMPLEMENTATION.md).
 
 ## How it works
 
@@ -40,6 +40,11 @@ python -m pipeline all --dry-run        # show what is cached / would run / bloc
 python -m pipeline narration            # generate missing narration lines only
 python -m pipeline narration --shot s07 # one shot only
 python -m pipeline radio                # radio cut: narration + placeholder music + subtitles on black
+python -m pipeline refs                 # reference sheet options; then: refs --pick jebena=1
+python -m pipeline keyframes            # stills; retake one by bumping keyframe.take in storyboard.json
+python -m pipeline shots                # motion (Ken Burns locally; Wan clips are ingested from Kaggle)
+python -m pipeline animatic             # vertical rough cut with pictures
+python -m pipeline.contact keyframes    # contact sheet of all keyframes for review
 python -m pipeline smoke                # call each provider once and record what really works
 python -m pipeline all                  # the whole film (make film); finished stages come from cache
 python -m pytest                        # tests (no network; the FFmpeg test renders a real radio cut)

@@ -231,7 +231,11 @@
           "properties": {
             "prompt": { "type": "string", "minLength": 10 },
             "seed": { "$ref": "#/$defs/seed" },
-            "refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+            "refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true, "maxItems": 4 },
+            "take": {
+              "type": "integer", "minimum": 1,
+              "description": "Bump to regenerate this keyframe. Seeds do not reproduce images on Cloudflare, so a retake is an explicit new version; earlier takes are kept."
+            }
           }
         },
         "motion": {

@@ -60,3 +60,10 @@ What broke, what I tried, what fixed it. Every entry points to evidence in `runs
   3. Built **batch narration** (all lines in one request, cut at the pauses) to make 10 requests into 1. It was rejected by its own safety check (see EXPERIMENTS E4) and fell back to one request per line.
 - **Result:** all 10 lines generated on the lite model (10:56-10:59 UTC). Three per-minute 429s on the lite model were waited out and retried successfully, which shows the daily/per-minute distinction working on real errors.
 - **Open:** the user decides by ear whether the lite voice is good enough, or whether to regenerate with `gemini-3.8-flash-tts` after its quota resets (about 08:00 UTC, 26 Nov).
+
+## F9. Vertical subtitles came out huge and re-wrapped into 3-4 lines
+- **When:** first vertical animatic (`outputs/final/animatic_9x16.mp4`, 720x1280), Phase 4. Found by looking at extracted frames, not by the tests.
+- **Symptom:** "One pot. Many cups. No one was ever left out." filled the middle of the frame in 3 lines, and the s01 line in 4, although the code produces at most 2 lines of 40 characters.
+- **Cause:** burned-in SRT subtitles are laid out by libass on a fixed 288-pixel-high canvas and scaled to the video height. On a 1280-px-tall frame, `FontSize=18` became about 80 px, so libass re-wrapped the lines to fit 720 px.
+- **Fix:** subtitles are now burned in from an **ASS** file laid out in real pixels for each format (`PlayResX/Y` = the video size), with `WrapStyle: 2` (no automatic re-wrapping) so the two-line breaks chosen in code are exactly what is shown. Font about 4.6% of the width (~40 characters across); bottom margin 20% of the height in vertical video, above the platform's buttons. The SRT is still written as the subtitle deliverable. Tests added (`tests/test_timeline_subtitles.py`).
+- **Also fixed:** line breaks now prefer a punctuation boundary when the lines stay balanced, so the radio-cut review's "No / one" and "It was / her way" breaks are gone.

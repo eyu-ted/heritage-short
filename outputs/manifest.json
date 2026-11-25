@@ -1,5 +1,139 @@
 {
   "stages": {
+    "keyframes": {
+      "s01": {
+        "hash": "1df2d392213c",
+        "meta": {
+          "height": 1536,
+          "refs": [],
+          "take": 2,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s01__1df2d392213c.jpg",
+        "produced_at": "2026-11-25T11:53:22+00:00",
+        "status": "ok"
+      },
+      "s02": {
+        "hash": "241ef0363cee",
+        "meta": {
+          "height": 1536,
+          "refs": [],
+          "take": 1,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s02__241ef0363cee.jpg",
+        "produced_at": "2026-11-25T11:43:18+00:00",
+        "status": "ok"
+      },
+      "s03": {
+        "hash": "c50dd5399d93",
+        "meta": {
+          "height": 1536,
+          "refs": [],
+          "take": 1,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s03__c50dd5399d93.jpg",
+        "produced_at": "2026-11-25T11:43:27+00:00",
+        "status": "ok"
+      },
+      "s04": {
+        "hash": "f18ea5add0a0",
+        "meta": {
+          "height": 1536,
+          "refs": [],
+          "take": 1,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s04__f18ea5add0a0.jpg",
+        "produced_at": "2026-11-25T11:43:35+00:00",
+        "status": "ok"
+      },
+      "s05": {
+        "hash": "08aa029cbccc",
+        "meta": {
+          "height": 1536,
+          "refs": [],
+          "take": 2,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s05__08aa029cbccc.jpg",
+        "produced_at": "2026-11-25T11:53:32+00:00",
+        "status": "ok"
+      },
+      "s06": {
+        "hash": "9033f029a7bb",
+        "meta": {
+          "height": 1536,
+          "refs": [
+            "jebena"
+          ],
+          "take": 1,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s06__9033f029a7bb.jpg",
+        "produced_at": "2026-11-25T11:53:40+00:00",
+        "status": "ok"
+      },
+      "s07": {
+        "hash": "9cc708e66c70",
+        "meta": {
+          "height": 1536,
+          "refs": [
+            "jebena",
+            "sini"
+          ],
+          "take": 3,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s07__9cc708e66c70.jpg",
+        "produced_at": "2026-11-25T11:55:48+00:00",
+        "status": "ok"
+      },
+      "s08": {
+        "hash": "e936bf208eb1",
+        "meta": {
+          "height": 1536,
+          "refs": [
+            "figure",
+            "sini"
+          ],
+          "take": 2,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s08__e936bf208eb1.jpg",
+        "produced_at": "2026-11-25T11:54:58+00:00",
+        "status": "ok"
+      },
+      "s09": {
+        "hash": "96b5599537f2",
+        "meta": {
+          "height": 1536,
+          "refs": [
+            "sini"
+          ],
+          "take": 2,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s09__96b5599537f2.jpg",
+        "produced_at": "2026-11-25T11:55:06+00:00",
+        "status": "ok"
+      },
+      "s10": {
+        "hash": "75f72aa9fdcc",
+        "meta": {
+          "height": 1536,
+          "refs": [
+            "jebena"
+          ],
+          "take": 1,
+          "width": 1536
+        },
+        "path": "outputs/keyframes/s10__75f72aa9fdcc.jpg",
+        "produced_at": "2026-11-25T11:54:12+00:00",
+        "status": "ok"
+      }
+    },
     "narration": {
       "s01": {
         "hash": "462029f444fb",
@@ -120,6 +254,234 @@
         "path": "outputs/narration/s10__8f806fbf6772.wav",
         "produced_at": "2026-11-25T10:59:11+00:00",
         "status": "ok"
+      }
+    },
+    "refs": {
+      "figure-opt1": {
+        "hash": "1b8d72c80e94",
+        "meta": {
+          "option": 1
+        },
+        "path": "outputs/refs/figure-opt1__1b8d72c80e94.jpg",
+        "produced_at": "2026-11-25T11:42:03+00:00",
+        "status": "ok"
+      },
+      "figure-opt2": {
+        "hash": "0a4b9cb3eea0",
+        "meta": {
+          "option": 2
+        },
+        "path": "outputs/refs/figure-opt2__0a4b9cb3eea0.jpg",
+        "produced_at": "2026-11-25T11:42:11+00:00",
+        "status": "ok"
+      },
+      "figure-opt3": {
+        "hash": "7aaa72f3232b",
+        "meta": {
+          "option": 3
+        },
+        "path": "outputs/refs/figure-opt3__7aaa72f3232b.jpg",
+        "produced_at": "2026-11-25T11:42:19+00:00",
+        "status": "ok"
+      },
+      "figure-opt4": {
+        "hash": "4846304747e4",
+        "meta": {
+          "option": 4
+        },
+        "path": "outputs/refs/figure-opt4__4846304747e4.jpg",
+        "produced_at": "2026-11-25T11:42:27+00:00",
+        "status": "ok"
+      },
+      "jebena-opt1": {
+        "hash": "e8c8a1b89093",
+        "meta": {
+          "option": 1
+        },
+        "path": "outputs/refs/jebena-opt1__e8c8a1b89093.jpg",
+        "produced_at": "2026-11-25T11:40:49+00:00",
+        "status": "ok"
+      },
+      "jebena-opt2": {
+        "hash": "cbb1fc2a05a2",
+        "meta": {
+          "option": 2
+        },
+        "path": "outputs/refs/jebena-opt2__cbb1fc2a05a2.jpg",
+        "produced_at": "2026-11-25T11:40:58+00:00",
+        "status": "ok"
+      },
+      "jebena-opt3": {
+        "hash": "351bac55d0d9",
+        "meta": {
+          "option": 3
+        },
+        "path": "outputs/refs/jebena-opt3__351bac55d0d9.jpg",
+        "produced_at": "2026-11-25T11:41:07+00:00",
+        "status": "ok"
+      },
+      "jebena-opt4": {
+        "hash": "2b3acc1cfb34",
+        "meta": {
+          "option": 4
+        },
+        "path": "outputs/refs/jebena-opt4__2b3acc1cfb34.jpg",
+        "produced_at": "2026-11-25T11:41:15+00:00",
+        "status": "ok"
+      },
+      "sini-opt1": {
+        "hash": "e8b04539f5d3",
+        "meta": {
+          "option": 1
+        },
+        "path": "outputs/refs/sini-opt1__e8b04539f5d3.jpg",
+        "produced_at": "2026-11-25T11:41:25+00:00",
+        "status": "ok"
+      },
+      "sini-opt2": {
+        "hash": "ae7410c7de8f",
+        "meta": {
+          "option": 2
+        },
+        "path": "outputs/refs/sini-opt2__ae7410c7de8f.jpg",
+        "produced_at": "2026-11-25T11:41:33+00:00",
+        "status": "ok"
+      },
+      "sini-opt3": {
+        "hash": "7dc9eaa92dda",
+        "meta": {
+          "option": 3
+        },
+        "path": "outputs/refs/sini-opt3__7dc9eaa92dda.jpg",
+        "produced_at": "2026-11-25T11:41:42+00:00",
+        "status": "ok"
+      },
+      "sini-opt4": {
+        "hash": "d16afe8c2fd0",
+        "meta": {
+          "option": 4
+        },
+        "path": "outputs/refs/sini-opt4__d16afe8c2fd0.jpg",
+        "produced_at": "2026-11-25T11:41:55+00:00",
+        "status": "ok"
+      }
+    },
+    "shots": {
+      "s01": {
+        "hash": "0414e0dba51a",
+        "meta": {
+          "duration_s": 9.331,
+          "render": "kenburns",
+          "render_ms": 10981
+        },
+        "path": "outputs/shots/s01__0414e0dba51a.mp4",
+        "produced_at": "2026-11-25T11:56:08+00:00",
+        "status": "ok"
+      },
+      "s02": {
+        "hash": "1cbad9514b4e",
+        "meta": {
+          "duration_s": 9.151,
+          "render": "kenburns",
+          "render_ms": 10672
+        },
+        "path": "outputs/shots/s02__1cbad9514b4e.mp4",
+        "produced_at": "2026-11-25T11:56:18+00:00",
+        "status": "ok"
+      },
+      "s03": {
+        "hash": "87f74e3da996",
+        "meta": {
+          "duration_s": 8.611,
+          "fallback_hash": "3ca126ca95d2",
+          "reason": "wan clip not ingested yet",
+          "render": "kenburns",
+          "render_ms": 9732
+        },
+        "path": "outputs/shots/s03__87f74e3da996.mp4",
+        "produced_at": "2026-11-25T11:56:28+00:00",
+        "status": "fallback"
+      },
+      "s04": {
+        "hash": "ccf77aa8f2f3",
+        "meta": {
+          "duration_s": 8.521,
+          "render": "kenburns",
+          "render_ms": 9931
+        },
+        "path": "outputs/shots/s04__ccf77aa8f2f3.mp4",
+        "produced_at": "2026-11-25T11:56:38+00:00",
+        "status": "ok"
+      },
+      "s05": {
+        "hash": "026be30fa5ec",
+        "meta": {
+          "duration_s": 6.191,
+          "render": "kenburns",
+          "render_ms": 6545
+        },
+        "path": "outputs/shots/s05__026be30fa5ec.mp4",
+        "produced_at": "2026-11-25T11:56:45+00:00",
+        "status": "ok"
+      },
+      "s06": {
+        "hash": "ce4507e939fd",
+        "meta": {
+          "duration_s": 8.121,
+          "render": "kenburns",
+          "render_ms": 9176
+        },
+        "path": "outputs/shots/s06__ce4507e939fd.mp4",
+        "produced_at": "2026-11-25T11:56:54+00:00",
+        "status": "ok"
+      },
+      "s07": {
+        "hash": "7f007916a56b",
+        "meta": {
+          "duration_s": 8.0,
+          "fallback_hash": "5d7daaec9229",
+          "reason": "wan clip not ingested yet",
+          "render": "kenburns",
+          "render_ms": 9189
+        },
+        "path": "outputs/shots/s07__7f007916a56b.mp4",
+        "produced_at": "2026-11-25T11:57:03+00:00",
+        "status": "fallback"
+      },
+      "s08": {
+        "hash": "cf3e3eede170",
+        "meta": {
+          "duration_s": 8.321,
+          "render": "kenburns",
+          "render_ms": 9720
+        },
+        "path": "outputs/shots/s08__cf3e3eede170.mp4",
+        "produced_at": "2026-11-25T11:57:13+00:00",
+        "status": "ok"
+      },
+      "s09": {
+        "hash": "fea7cb769098",
+        "meta": {
+          "duration_s": 7.0,
+          "render": "kenburns",
+          "render_ms": 7861
+        },
+        "path": "outputs/shots/s09__fea7cb769098.mp4",
+        "produced_at": "2026-11-25T11:57:21+00:00",
+        "status": "ok"
+      },
+      "s10": {
+        "hash": "f04d138bd2fa",
+        "meta": {
+          "duration_s": 8.0,
+          "fallback_hash": "ba99aecfe8c4",
+          "reason": "wan clip not ingested yet",
+          "render": "kenburns",
+          "render_ms": 9298
+        },
+        "path": "outputs/shots/s10__f04d138bd2fa.mp4",
+        "produced_at": "2026-11-25T11:57:30+00:00",
+        "status": "fallback"
       }
     }
   },

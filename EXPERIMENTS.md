@@ -33,6 +33,29 @@ Format: **hypothesis → change → result → decision**. One change at a time;
 ## E3 (observation, to turn into an experiment in Phase 4). Is the prop vocabulary understood?
 - **Observation:** in both klein images the style matches the brief (hand-painted, warm, earthy, grass on the floor), but **neither draws a real jebena** (A: a teapot shape; B: an urn), and the cups have handles although the prompt says "handleless".
 - **Hypothesis for Phase 4:** a reference image of a correct jebena and sini cups (chosen from generated options) passed as `input_image_0` will fix the props more reliably than more words in the prompt.
+- **Step 1 result (reference sheet, 25 Nov):** I split the vague "props" reference into separate, precise descriptions (jebena: round body, upright neck, handle, spout from the shoulder, "not a teapot, no lid, not a vase"; sini: "NO handles, like tiny bowls") and generated 4 options each on a plain background (`outputs/refs/contact_sheet.jpg`, 12 images, klein-4b at 1024x1024).
+  - jebena: **2 of 4 correct** (opt1, opt2). opt3 and opt4 have no spout and read as vases.
+  - sini: **4 of 4 handleless**, against 0 of 2 in the smoke test.
+  - figure (from behind, white netela with tibeb): 4 of 4 from behind; opt2 turns enough to show part of the face, which breaks the no-likeness rule.
+  - So precise description + isolated reference fixed the cups completely and the jebena half the time. Generating several options and picking one (as the brief suggests) is what makes it reliable. Step 2 (does passing the picked image into keyframes keep the props right in a full scene?) is measured on s06-s10.
+
+## E6 (observation). First keyframes without references (s01-s05)
+- **Result:** style consistent across all five (hand-painted, warm, earthy). Two problems a human review caught before any GPU time was spent animating them:
+  - s05: a **disembodied hand** floats above the pestle (the "hands" weak spot the brief warns about).
+  - s01: the grass reads as a growing lawn, not fresh grass strewn on the floor for the ceremony.
+- **Decision:** retake both with prompt changes (s05: no hands in frame; s01: grass blades scattered on an earthen floor), bumping `keyframe.take` so take 1 is kept for comparison.
+- **Result (take 2):** both fixed. s05 has no hands; s01 shows grass strewn on an earthen floor. Only those two shots were regenerated; s02-s04 stayed cached (the cache key includes `take`).
+
+## E7. Reference images in full scenes: they fix the object, and copy the backdrop
+- **Hypothesis (E3 step 2):** passing the picked reference images (jebena opt1, sini opt1, figure opt1; the author's picks) as klein `input_image_N` keeps the props right inside full scenes.
+- **Result, take 1 (s06-s10):**
+  - s06 and s10: **the jebena matches the reference** (neck, handle, spout) inside real scenes.
+  - s07, s08, s09: the model copied the reference sheet's **plain cream backdrop** too. s09 was essentially the reference again (a tray on white); s07 showed one cup instead of many; s08 put the figure in an empty white room.
+- **Change (take 2, s07-s09 only):** describe the room in the shot's own prompt ("inside a warm, dim room with earthen walls and fresh grass strewn on the floor") and say "the reference images give only the look of the objects; the setting is the room described, never a plain backdrop". Put in the shots' prompts, not the shared prompt builder, so the good s06/s10 stayed cached.
+- **Result, take 2:** backdrops fixed in all three; s09 became the intended shot (cups, popcorn basket, empty stools, room). But s07 poured from the bottom of the pot, not the spout, and the front cup had a handle.
+- **Take 3 (s07, last attempt under a 3-takes rule):** closer framing and the physics spelled out ("flows OUT OF ITS SPOUT", "every cup ... NO handle"). Result: correct jebena, pour from the spout, all cups handleless, many cups on the tray, room setting.
+- **What I learned:** reference images are the strongest tool for *what* an object looks like, but they also pull the reference's composition along. Reference sheets should be made on a plain background (so they are clean references) **and** every scene prompt must state its own setting.
+- **Cost of the look-development loop:** 12 reference options + 15 keyframe generations (10 shots, 5 retakes) on klein-4b, all logged in `runs.jsonl`.
 
 ## E4. Batch narration: can one TTS request replace ten?
 - **Hypothesis:** if all 10 lines are sent in one request, separated by blank lines, with the style instruction "leave a long, clear pause of about two seconds between paragraphs", the pauses between lines will be clearly longer than the pauses inside lines, so the take can be cut at its 9 longest silences. That would turn 10 requests into 1 against a 10-requests/day free quota (F8).

@@ -46,7 +46,7 @@ def _quota(message: str, retry_after: float | None = None) -> "QuotaError":
     429 says "PerDay" and "retry in 21h". Retrying that three times only wastes time.
     """
     compact = message.lower().replace(" ", "")
-    daily = "perday" in compact
+    daily = "perday" in compact or "daily" in compact  # Cloudflare: "daily free allocation"
     match = re.search(r"retrydelay['\"]?:\s*['\"]?(\d+(?:\.\d+)?)s", message, re.IGNORECASE)
     if retry_after is None and match:
         retry_after = float(match.group(1))

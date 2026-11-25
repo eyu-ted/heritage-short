@@ -29,16 +29,25 @@ def _fits(text: str) -> bool:
     return len(textwrap.wrap(text, MAX_CHARS)) <= MAX_LINES
 
 
+LINE_PUNCT_BONUS = 12  # a break after punctuation may be up to this many chars less balanced
+
+
 def lines_for(piece: str) -> tuple[str, ...]:
-    """Wrap a cue into balanced lines ("One pot. Many cups. / No one was ever left out."),
-    not a full first line and a one-word second line."""
+    """Wrap a cue into two balanced lines, preferring a break after punctuation:
+    "One pot. Many cups. / No one was ever left out." rather than "... No / one was ...",
+    and never a full first line with a one-word second line."""
     if len(piece) <= MAX_CHARS:
         return (piece,)
-    for width in range(math.ceil(len(piece) / 2), MAX_CHARS + 1):
-        wrapped = textwrap.wrap(piece, width)
-        if len(wrapped) <= MAX_LINES:
-            return tuple(wrapped)
-    return tuple(textwrap.wrap(piece, MAX_CHARS))
+    words = piece.split()
+    best: tuple[float, tuple[str, ...]] | None = None
+    for i in range(1, len(words)):
+        first, second = " ".join(words[:i]), " ".join(words[i:])
+        if len(first) > MAX_CHARS or len(second) > MAX_CHARS:
+            continue
+        cost = abs(len(first) - len(second)) - (LINE_PUNCT_BONUS if first[-1] in ",.;:!?" else 0)
+        if best is None or cost < best[0]:
+            best = (cost, (first, second))
+    return best[1] if best else tuple(textwrap.wrap(piece, MAX_CHARS))
 
 
 def _greedy(words: list[str]) -> list[str]:
@@ -123,3 +132,43 @@ def to_srt(cues: list[Cue]) -> str:
     blocks = [f"{i}\n{_stamp(c.start)} --> {_stamp(c.end)}\n" + "\n".join(c.lines)
               for i, c in enumerate(cues, start=1)]
     return "\n\n".join(blocks) + "\n"
+
+
+def _ass_stamp(seconds: float) -> str:
+    cs = int(round(seconds * 100))
+    h, cs = divmod(cs, 360_000)
+    m, cs = divmod(cs, 6000)
+    s, cs = divmod(cs, 100)
+    return f"{h}:{m:02d}:{s:02d}.{cs:02d}"
+
+
+def style_for(width: int, height: int) -> dict[str, int]:
+    """Font and bottom margin in real pixels. Vertical video keeps text above the platform's
+    buttons and caption area (the bottom ~20% of a phone feed)."""
+    font = round(min(width * 0.046, height * 0.06))  # ~40 characters fit across the frame
+    margin = round(height * (0.20 if height > width else 0.07))
+    return {"font": font, "margin_v": margin, "outline": max(2, font // 14)}
+
+
+def to_ass(cues: list[Cue], width: int, height: int) -> str:
+    """Subtitles for burning in. Unlike SRT (scaled from a fixed 288-px canvas, which made the
+    vertical text huge and re-wrapped it into 3-4 lines), ASS is laid out in real pixels, and
+    WrapStyle 2 keeps exactly the two-line breaks chosen above."""
+    st = style_for(width, height)
+    head = [
+        "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
+        "WrapStyle: 2", "ScaledBorderAndShadow: yes", "",
+        "[V4+ Styles]",
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, "
+        "Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, "
+        "Alignment, MarginL, MarginR, MarginV, Encoding",
+        f"Style: Default,Arial,{st['font']},&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,0,0,0,0,100,100,0,0,"
+        f"1,{st['outline']},0,2,{round(width * 0.05)},{round(width * 0.05)},{st['margin_v']},1",
+        "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
+    ]
+    events = [
+        f"Dialogue: 0,{_ass_stamp(c.start)},{_ass_stamp(c.end)},Default,,0,0,0,,"
+        + "\\N".join(line.replace("{", "(").replace("}", ")") for line in c.lines)
+        for c in cues
+    ]
+    return "\n".join(head + events) + "\n"

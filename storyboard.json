@@ -28,8 +28,8 @@
   "render": {
     "fps": 24,
     "keyframe_size": [
-      1344,
-      768
+      1536,
+      1536
     ],
     "image_steps": 4,
     "video_resolution": "480p",
@@ -39,16 +39,22 @@
   "style_block": "Hand-painted illustration with visible brush texture, warm golden morning light, soft film grain, earthy palette of terracotta, amber, charcoal black and fresh green, gentle depth of field, intimate and calm, a modest Ethiopian home, main subject centred with generous empty margins on every side, no text, no letters, no logos.",
   "references": [
     {
-      "id": "figure",
-      "description": "An elderly Ethiopian woman always seen from behind or in silhouette, never showing her face, wrapped in a white cotton netela shawl with a narrow woven coloured border (tibeb).",
-      "seed": 101,
-      "image": null
+      "id": "jebena",
+      "description": "A traditional Ethiopian jebena coffee pot of matte black clay: a perfectly round, spherical body; a long, narrow, upright neck rising from the top of the body; a curved handle joining the neck to the body; and a short spout rising from the shoulder of the body. Not a teapot, no lid, not a vase",
+      "seed": 110,
+      "image": "outputs/refs/jebena-opt1__e8c8a1b89093.jpg"
     },
     {
-      "id": "props",
-      "description": "A black clay jebena coffee pot with a round belly and a long thin neck, small white handleless sini cups on a low wooden rekebot tray, fresh long green grass strewn on the floor, a small charcoal brazier.",
-      "seed": 102,
-      "image": null
+      "id": "sini",
+      "description": "Small white porcelain sini cups with NO handles, shaped like tiny round bowls, arranged in rows on a low carved wooden rekebot tray",
+      "seed": 120,
+      "image": "outputs/refs/sini-opt1__e8b04539f5d3.jpg"
+    },
+    {
+      "id": "figure",
+      "description": "An elderly Ethiopian woman always seen from behind, never showing her face, wrapped in a white cotton netela shawl with a narrow woven coloured border (tibeb), seated on a low wooden stool",
+      "seed": 130,
+      "image": "outputs/refs/figure-opt1__1b8d72c80e94.jpg"
     }
   ],
   "narration_defaults": {
@@ -67,11 +73,10 @@
         "en": "Every morning, before the city woke, my grandmother spread fresh grass on the floor."
       },
       "keyframe": {
-        "prompt": "Wide establishing view of a modest home courtyard at dawn, fresh long green grass strewn across the earthen floor, a low wooden stool and a small charcoal brazier waiting in the centre, soft mist and first golden light through an open doorway",
+        "prompt": "Wide view of a modest home courtyard at dawn: long blades of fresh-cut green grass scattered loosely across a bare earthen floor (not a lawn, not growing), a low wooden stool and a small charcoal brazier waiting in the centre, soft mist and first golden light through an open doorway",
         "seed": 1001,
-        "refs": [
-          "props"
-        ]
+        "refs": [],
+        "take": 2
       },
       "motion": {
         "backend": "kenburns",
@@ -98,9 +103,8 @@
       "keyframe": {
         "prompt": "Close-up of green unroasted coffee beans being rinsed in water inside a round dark clay bowl, droplets catching soft morning light, fingertips only partly visible at the edge of the frame",
         "seed": 1002,
-        "refs": [
-          "props"
-        ]
+        "refs": [],
+        "take": 1
       },
       "motion": {
         "backend": "kenburns",
@@ -127,9 +131,8 @@
       "keyframe": {
         "prompt": "Close-up of coffee beans roasting in a flat round iron pan over glowing charcoal, beans turning from pale green to deep brown, thin curls of smoke rising into warm light",
         "seed": 1003,
-        "refs": [
-          "props"
-        ]
+        "refs": [],
+        "take": 1
       },
       "motion": {
         "backend": "wan",
@@ -156,9 +159,8 @@
       "keyframe": {
         "prompt": "Fragrant frankincense smoke curling up from a small clay incense burner resting on fresh grass, strongly backlit by golden light against a dark warm background",
         "seed": 1004,
-        "refs": [
-          "props"
-        ]
+        "refs": [],
+        "take": 1
       },
       "motion": {
         "backend": "kenburns",
@@ -183,11 +185,10 @@
         "en": "The sound of grinding was the first music of my day."
       },
       "keyframe": {
-        "prompt": "Close-up of a traditional wooden mortar filled with dark roasted coffee beans and a metal pestle, the top of the pestle held by a softly out-of-focus hand, warm side light",
+        "prompt": "Close-up of a traditional wooden mortar filled with dark roasted coffee beans, a metal pestle resting inside it, warm side light, no hands, no people anywhere in the frame",
         "seed": 1005,
-        "refs": [
-          "props"
-        ]
+        "refs": [],
+        "take": 2
       },
       "motion": {
         "backend": "kenburns",
@@ -215,8 +216,9 @@
         "prompt": "A black clay jebena coffee pot resting on glowing charcoal, gentle steam rising from its spout, deep warm shadows, calm and still",
         "seed": 1006,
         "refs": [
-          "props"
-        ]
+          "jebena"
+        ],
+        "take": 1
       },
       "motion": {
         "backend": "kenburns",
@@ -241,11 +243,13 @@
         "en": "One pot. Many cups. No one was ever left out."
       },
       "keyframe": {
-        "prompt": "A black clay jebena tilted high above a low wooden tray, a thin unbroken stream of dark coffee pouring into a row of small white handleless cups, steam rising, warm golden light",
+        "prompt": "Close-up inside a warm, dim room with earthen walls and fresh grass on the floor: the black clay jebena is tilted from the upper left, and a thin, unbroken stream of dark coffee flows OUT OF ITS SPOUT down into a small white cup; the cup sits among a row of identical small white cups on a low carved wooden tray; every cup is a tiny round bowl with NO handle; steam rises, warm golden light; the reference images give only the look of the objects; the setting is the room described, never a plain backdrop",
         "seed": 1007,
         "refs": [
-          "props"
-        ]
+          "jebena",
+          "sini"
+        ],
+        "take": 3
       },
       "motion": {
         "backend": "wan",
@@ -270,12 +274,13 @@
         "en": "Three rounds: abol, tona, and baraka, the blessing."
       },
       "keyframe": {
-        "prompt": "An elderly woman seen only from behind, seated on a low wooden stool, holding out a small white cup toward the viewer, soft backlight around her shawl, face not visible",
+        "prompt": "Inside a warm, dim room with earthen walls and fresh grass strewn on the floor, a glowing charcoal brazier nearby: an elderly woman seen only from behind, seated on a low wooden stool, holding out a small white cup toward the viewer, soft warm backlight around her shawl, face not visible; the reference images give only the look of the objects; the setting is the room described, never a plain backdrop",
         "seed": 1008,
         "refs": [
           "figure",
-          "props"
-        ]
+          "sini"
+        ],
+        "take": 2
       },
       "motion": {
         "backend": "kenburns",
@@ -300,11 +305,12 @@
         "en": "By the third cup, strangers had become family."
       },
       "keyframe": {
-        "prompt": "A row of small white coffee cups on a wooden tray with wisps of steam, a woven basket of roasted popcorn beside them, empty low stools around in warm light as if people are about to gather",
+        "prompt": "Inside a warm, dim room with earthen walls and fresh grass strewn on the floor, in warm late-morning light: a carved wooden tray of small white coffee cups with wisps of steam, a woven basket of roasted popcorn beside it, empty low wooden stools around as if people are about to gather; the reference images give only the look of the objects; the setting is the room described, never a plain backdrop",
         "seed": 1009,
         "refs": [
-          "props"
-        ]
+          "sini"
+        ],
+        "take": 2
       },
       "motion": {
         "backend": "kenburns",
@@ -332,8 +338,9 @@
         "prompt": "A wooden door opening from the courtyard onto bright morning light, fresh grass on the floor, the jebena resting by the brazier in the foreground",
         "seed": 1010,
         "refs": [
-          "props"
-        ]
+          "jebena"
+        ],
+        "take": 1
       },
       "motion": {
         "backend": "wan",

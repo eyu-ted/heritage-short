@@ -46,6 +46,25 @@ def test_lines_are_balanced():
         assert all(15 <= len(line) <= 40 for line in lines)  # no one-word orphan line
 
 
+def test_breaks_prefer_punctuation_over_splitting_a_phrase():
+    # Both cases were flagged in the radio-cut review ("No / one", "It was / her way").
+    assert subtitles.lines_for("One pot. Many cups. No one was ever left out.") == (
+        "One pot. Many cups.", "No one was ever left out.")
+    assert subtitles.lines_for("Incense filled the room. It was her way of saying: welcome.") == (
+        "Incense filled the room.", "It was her way of saying: welcome.")
+
+
+def test_ass_is_laid_out_in_real_pixels_without_rewrapping():
+    cues = [subtitles.Cue(1.5, 3.25, ("One pot. Many cups.", "No one was ever left out."))]
+    vertical = subtitles.to_ass(cues, 720, 1280)
+    assert "PlayResX: 720" in vertical and "PlayResY: 1280" in vertical
+    assert "WrapStyle: 2" in vertical
+    assert "Dialogue: 0,0:00:01.50,0:00:03.25,Default,,0,0,0,,One pot. Many cups.\\NNo one was ever left out." in vertical
+    v, h = subtitles.style_for(720, 1280), subtitles.style_for(1280, 720)
+    assert 28 <= v["font"] <= 40 and v["margin_v"] >= 0.19 * 1280  # above the phone feed's buttons
+    assert h["margin_v"] < v["margin_v"]
+
+
 def test_cues_stay_inside_the_spoken_time(storyboard):
     slots, _ = timeline.build(storyboard, _durations(storyboard, 4.0))
     cues = subtitles.cues_for(slots)

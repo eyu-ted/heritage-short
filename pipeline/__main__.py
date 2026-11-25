@@ -5,7 +5,9 @@
   all                      run every stage in order (what `make film` calls)
   narration | keyframes | shots | music | assemble
                            run one stage
+  refs                     reference sheet: options per reference; --pick jebena=2 approves one
   radio                    build the radio cut (narration + placeholder music on black)
+  animatic                 the radio cut with the shots as picture (vertical 9:16)
 
 Options:
   --dry-run       show what would run (cached / would run / blocked); no API calls
@@ -47,7 +49,9 @@ EXIT_OK, EXIT_INVALID, EXIT_NOT_READY, EXIT_PROVIDER, EXIT_FFMPEG = 0, 1, 2, 3, 
 
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="python -m pipeline", description="Heritage Short pipeline")
-    p.add_argument("command", choices=["validate", "smoke", "radio", "all", *STAGE_ORDER])
+    p.add_argument("command", choices=["validate", "smoke", "refs", "radio", "animatic", "all", *STAGE_ORDER])
+    p.add_argument("--options", type=int, default=4, help="refs: options per reference (default 4)")
+    p.add_argument("--pick", default=None, help="refs: approve an option, e.g. jebena=2")
     p.add_argument("--storyboard", type=Path, default=None, help="path to storyboard.json")
     p.add_argument("--shot", action="append", default=[], help="only this shot id (repeatable)")
     p.add_argument("--force", action="store_true", help="ignore cache, regenerate")
@@ -56,10 +60,16 @@ def _parser() -> argparse.ArgumentParser:
     return p
 
 
-def _status(job: Job, manifest: Manifest, force: bool) -> str:
+def _fresh(ctx: Context, stage: str, job: Job) -> bool:
+    """A stage may refine freshness (shots: a Ken Burns fallback goes stale on its own inputs)."""
+    custom = getattr(STAGES.get(stage), "is_fresh", None)
+    return custom(ctx, job) if custom else ctx.manifest.is_fresh(job)
+
+
+def _status(ctx: Context, stage: str, job: Job) -> str:
     if job.blocked:
         return f"blocked: {job.blocked}"
-    if not force and manifest.is_fresh(job):
+    if not ctx.force and _fresh(ctx, stage, job):
         return "cached"
     return "would run"
 
@@ -76,7 +86,7 @@ def _print_plan(ctx: Context, stages: list[str]) -> None:
     print("-" * 72)
     for stage in stages:
         for job in _select(stage, STAGES[stage].jobs(ctx.sb, ctx.manifest), ctx.shot_ids):
-            status = _status(job, ctx.manifest, ctx.force)
+            status = _status(ctx, stage, job)
             counts["blocked" if status.startswith("blocked") else status] += 1
             print(f"{stage:<10} {job.key:<14} {job.hash:<13} {status}")
     print("-" * 72)
@@ -84,25 +94,28 @@ def _print_plan(ctx: Context, stages: list[str]) -> None:
 
 
 def _run_stage(ctx: Context, stage: str) -> None:
+    """Run every job that is ready; then, if any were blocked, stop the pipeline here
+    (later stages depend on them) and say why."""
     module = STAGES[stage]
-    selected = _select(stage, module.jobs(ctx.sb, ctx.manifest), ctx.shot_ids)
-    blocked = [j for j in selected if j.blocked]
-    if blocked:
-        raise NotReadyError(f"{stage}: {len(blocked)} job(s) blocked, e.g. {blocked[0].key}: {blocked[0].blocked}")
+    jobs = _select(stage, module.jobs(ctx.sb, ctx.manifest), ctx.shot_ids)
+    blocked = [j for j in jobs if j.blocked]
+    selected = [j for j in jobs if not j.blocked]
 
     todo = []
     for job in selected:
-        if not ctx.force and ctx.manifest.is_fresh(job):
+        if not ctx.force and _fresh(ctx, stage, job):
             entry = ctx.manifest.entry(stage, job.key)
             log_event(ctx.paths.runs_log, stage=stage, shot_id=job.key, model=job.inputs.get("model"),
                       input_hash=job.hash, output=entry["path"], status="cache_hit")
         else:
             todo.append(job)
-    print(f"[{stage}] {len(selected) - len(todo)} cached, {len(todo)} to generate")
+    print(f"[{stage}] {len(selected) - len(todo)} cached, {len(todo)} to generate, {len(blocked)} blocked")
     if todo and ctx.offline:
         raise NotReadyError(f"{stage}: --offline but {len(todo)} job(s) are not cached: "
                             f"{[j.key for j in todo]}")
     module.run(ctx, todo)
+    if blocked:
+        raise NotReadyError(f"{stage}: {len(blocked)} job(s) blocked, e.g. {blocked[0].key}: {blocked[0].blocked}")
 
 
 def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
@@ -144,10 +157,21 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             from . import smoke
 
             return smoke.run(paths, sb)
-        if args.command == "radio":
+        if args.command in ("radio", "animatic"):
             from . import radio
 
-            radio.build(ctx)
+            radio.build(ctx, picture=args.command == "animatic")
+            return EXIT_OK
+        if args.command == "refs":
+            from . import refs
+
+            if args.pick:
+                print(f"[refs] approved {args.pick} -> {refs.pick(ctx, args.pick)}")
+                return EXIT_OK
+            ref_jobs = refs.jobs(ctx.sb, ctx.manifest, options=args.options)
+            todo = [j for j in ref_jobs if args.force or not ctx.manifest.is_fresh(j)]
+            print(f"[refs] {len(ref_jobs) - len(todo)} cached, {len(todo)} to generate")
+            refs.run(ctx, todo)
             return EXIT_OK
         for stage in stages:
             _run_stage(ctx, stage)
@@ -167,6 +191,9 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     except FFmpegError as err:
         print(f"FFmpeg failure: {err}", file=sys.stderr)
         return EXIT_FFMPEG
+    except ValueError as err:  # e.g. a bad --pick
+        print(f"error: {err}", file=sys.stderr)
+        return EXIT_INVALID
     return EXIT_OK
 
 
