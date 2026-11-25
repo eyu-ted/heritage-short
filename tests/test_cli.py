@@ -42,8 +42,13 @@ def test_unknown_shot_rejected(repo, capsys):
 
 
 def test_unbuilt_stage_exits_not_ready(repo, capsys):
-    assert main(["music"], root=repo.root) == 2  # the music stage arrives in Phase 5
+    assert main(["assemble"], root=repo.root) == 2  # assembly arrives in Phase 7
     assert "not available yet" in capsys.readouterr().err
+
+
+def test_music_not_made_yet_points_to_kaggle(repo, capsys):
+    assert main(["music"], root=repo.root) == 2
+    assert "python -m pipeline export music" in capsys.readouterr().err
 
 
 def _fake_keyframe(repo, sb, manifest, job, colour):

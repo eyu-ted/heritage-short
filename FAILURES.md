@@ -67,3 +67,12 @@ What broke, what I tried, what fixed it. Every entry points to evidence in `runs
 - **Cause:** burned-in SRT subtitles are laid out by libass on a fixed 288-pixel-high canvas and scaled to the video height. On a 1280-px-tall frame, `FontSize=18` became about 80 px, so libass re-wrapped the lines to fit 720 px.
 - **Fix:** subtitles are now burned in from an **ASS** file laid out in real pixels for each format (`PlayResX/Y` = the video size), with `WrapStyle: 2` (no automatic re-wrapping) so the two-line breaks chosen in code are exactly what is shown. Font about 4.6% of the width (~40 characters across); bottom margin 20% of the height in vertical video, above the platform's buttons. The SRT is still written as the subtitle deliverable. Tests added (`tests/test_timeline_subtitles.py`).
 - **Also fixed:** line breaks now prefer a punctuation boundary when the lines stay balanced, so the radio-cut review's "No / one" and "It was / her way" breaks are gone.
+
+## F10. First Kaggle runs had no internet (OPEN until the account is phone-verified)
+- **When:** 25 Nov, 15:27 UTC. Both notebooks were pushed with the Kaggle CLI (`buna-music` v1, `buna-wan` v1), on T4 x2 with `enable_internet: true`. Two `kaggle` lines with `status: error` are in `runs.jsonl`.
+- **Symptom:** the music notebook failed at `git clone` (`Could not resolve host: github.com`, after 48 s). The Wan notebook spent 7 minutes on pip retries (`Failed to resolve 'pypi.org'`), then failed with `No matching distribution found for ftfy`. No model code ran.
+- **Diagnosis:** the server-side metadata (`kaggle kernels pull -m`) confirms `enable_internet: true` and `machine_shape: NvidiaTeslaT4`, yet DNS failed for every host. This is how Kaggle behaves when the **account is not phone-verified**: internet is silently withheld.
+- **Also learned from the log:** Kaggle's image now runs **Python 3.13**. ACE-Step 1.5 declares `>=3.11,<3.13`, which is why the notebook installs it with `--ignore-requires-python`. That combination is still untested.
+- **Fixes in code:** both notebooks now check DNS in their first cell and stop within seconds with the fix spelled out, instead of retrying for minutes.
+- **Needs the user:** phone verification on kaggle.com (Settings → Phone verification), then the same notebooks are pushed again.
+- **Lesson:** a smoke test that only lists datasets with the API token (Phase 2) does not prove a notebook can reach the internet. The real check is a 10-second notebook that resolves a hostname.

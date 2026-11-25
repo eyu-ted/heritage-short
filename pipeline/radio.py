@@ -36,8 +36,13 @@ def _need(ctx: Context, stage: str) -> dict[str, Path]:
     return found
 
 
-def audio_graph(slots: list[timeline.Slot], total: float, first: int, duck: dict, loudness: dict) -> list[str]:
-    """Narration inputs are [first .. first+n-1], the placeholder pad is input first+n."""
+MUSIC_BED_LUFS = -26  # the score sits well under the voice before ducking
+
+
+def audio_graph(slots: list[timeline.Slot], total: float, first: int, duck: dict, loudness: dict,
+                music: bool = False) -> list[str]:
+    """Narration inputs are [first .. first+n-1]; input first+n is the music: the placeholder
+    pad, or (music=True) a real score candidate, levelled, trimmed to the film and faded out."""
     n = len(slots)
     parts = []
     for i, slot in enumerate(slots):
@@ -45,8 +50,14 @@ def audio_graph(slots: list[timeline.Slot], total: float, first: int, duck: dict
     parts.append("".join(f"[n{i}]" for i in range(n)) +
                  f"amix=inputs={n}:normalize=0:duration=longest,apad=whole_dur={total}[narr]")
     parts.append("[narr]asplit=2[narr_main][narr_sc]")
-    parts.append(f"[{first + n}:a]aresample=48000,lowpass=f=900,tremolo=f=0.15:d=0.3,"
-                 f"afade=t=in:d=2,afade=t=out:st={max(0.0, total - 3)}:d=3,volume=-10dB[pad]")
+    fade = f"afade=t=out:st={max(0.0, total - 3)}:d=3"
+    if music:
+        parts.append(f"[{first + n}:a]aresample=48000,atrim=0:{total},asetpts=PTS-STARTPTS,"
+                     f"loudnorm=I={MUSIC_BED_LUFS}:TP=-3:LRA=11,aresample=48000,afade=t=in:d=1.5,{fade},"
+                     f"apad=whole_dur={total}[pad]")
+    else:
+        parts.append(f"[{first + n}:a]aresample=48000,lowpass=f=900,tremolo=f=0.15:d=0.3,"
+                     f"afade=t=in:d=2,{fade},volume=-10dB[pad]")
     parts.append(f"[pad][narr_sc]sidechaincompress=threshold={duck['threshold']}:ratio={duck['ratio']}:"
                  f"attack={duck['attack_ms']}:release={duck['release_ms']}[ducked]")
     parts.append(f"[narr_main][ducked]amix=inputs=2:normalize=0:duration=first,"
@@ -68,16 +79,27 @@ def picture_graph(slots: list[timeline.Slot], size: tuple[int, int], fps: int, e
     return parts
 
 
-def build(ctx: Context, picture: bool = False) -> Path:
+def build(ctx: Context, picture: bool = False, music_key: str | None = None) -> Path:
+    """music_key: audition a score candidate (output gets its name); otherwise the chosen
+    score if there is one, else the placeholder pad."""
+    from . import music
+
     fmt = FORMATS[picture]
     narr_paths = _need(ctx, "narration")
     seconds = {sid: float(ctx.manifest.entry("narration", sid)["meta"]["duration_s"]) for sid in narr_paths}
     slots, total = timeline.build(ctx.sb, seconds)
 
+    key = music_key or ctx.sb["music"]["chosen"]
+    music_path = music.candidate_path(ctx, key) if key else None
+    if key and music_path is None:
+        raise NotReadyError(f"music {key!r} is not ingested for the current inputs "
+                            "(`python -m pipeline ingest music --from <download>`)")
+    name = f"{fmt['name']}__{music_key}" if music_key else fmt["name"]
+
     out_dir = ctx.paths.outputs / "final"
     out_dir.mkdir(parents=True, exist_ok=True)
     fps, (w, h) = ctx.sb["render"]["fps"], fmt["size"]
-    srt_name, ass_name, mp4_name = f"{fmt['name']}.srt", f"{fmt['name']}.ass", f"{fmt['name']}.mp4"
+    srt_name, ass_name, mp4_name = f"{fmt['name']}.srt", f"{fmt['name']}.ass", f"{name}.mp4"
     cues = subtitles.cues_for(slots)
     (out_dir / srt_name).write_text(subtitles.to_srt(cues), encoding="utf-8")  # the deliverable file
     (out_dir / ass_name).write_text(subtitles.to_ass(cues, w, h), encoding="utf-8")  # pixel-exact burn-in
@@ -93,9 +115,13 @@ def build(ctx: Context, picture: bool = False) -> Path:
         graph, video_label, first_audio = [], "[0:v]", 1
     for slot in slots:
         args += ["-i", str(narr_paths[slot.shot_id].resolve())]
-    args += ["-f", "lavfi", "-i", f"aevalsrc=exprs={PAD_EXPR}:s=48000:d={total}"]
+    if music_path:
+        args += ["-i", str(music_path.resolve())]
+    else:
+        args += ["-f", "lavfi", "-i", f"aevalsrc=exprs={PAD_EXPR}:s=48000:d={total}"]
 
-    graph += audio_graph(slots, total, first_audio, ctx.sb["mix"]["duck"], ctx.sb["mix"]["loudness"])
+    graph += audio_graph(slots, total, first_audio, ctx.sb["mix"]["duck"], ctx.sb["mix"]["loudness"],
+                         music=music_path is not None)
     graph.append(f"{video_label}subtitles={ass_name}[vout]")
     args += ["-filter_complex", ";".join(graph), "-map", "[vout]", "-map", "[aout]", "-t", str(total),
              "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p", "-r", str(fps),
@@ -105,7 +131,8 @@ def build(ctx: Context, picture: bool = False) -> Path:
     ffmpeg.run(args, cwd=out_dir)
 
     out = out_dir / mp4_name
-    print(f"[{fmt['name']}] {ctx.paths.rel(out)}  ({total:.1f}s, {w}x{h}, subtitles: {srt_name})")
+    print(f"[{fmt['name']}] {ctx.paths.rel(out)}  ({total:.1f}s, {w}x{h}, subtitles: {srt_name}, "
+          f"music: {key or 'placeholder pad'})")
     for slot in slots:
         print(f"  {slot.shot_id}  {slot.start:6.2f}s  +{slot.duration:5.2f}s  narration {slot.narration_s:.2f}s")
     return out

@@ -32,6 +32,9 @@ copy .env.example .env            # then add your own keys; never commit .env
 
 Keys needed (all free tiers): Google AI Studio (Gemini), Cloudflare Workers AI (account id + token with Workers AI permission), Kaggle (GPU notebooks).
 
+The two GPU models (Wan 2.2 for motion, ACE-Step 1.5 for music) run in Kaggle notebooks, not from this machine. `export` writes a self-contained notebook (sources in [`notebooks/`](notebooks/)); you run it on Kaggle; `ingest` accepts only outputs whose job hash matches the current storyboard. See [`pipeline/kaggle.py`](pipeline/kaggle.py).
+Instead of uploading by hand you can push the notebook with the Kaggle CLI (`pip install kaggle six`, `KAGGLE_API_TOKEN` and `KAGGLE_USERNAME` set): `kaggle kernels push -p kaggle/build/wan`, then `kaggle kernels output <user>/buna-wan -p kaggle/downloads/wan`. The notebook is created **private**.
+
 ## Commands
 
 ```
@@ -44,6 +47,12 @@ python -m pipeline refs                 # reference sheet options; then: refs --
 python -m pipeline keyframes            # stills; retake one by bumping keyframe.take in storyboard.json
 python -m pipeline shots                # motion (Ken Burns locally; Wan clips are ingested from Kaggle)
 python -m pipeline animatic             # vertical rough cut with pictures
+python -m pipeline export wan --shot s07   # Kaggle notebook (jobs + keyframe inside) -> kaggle/build/
+python -m pipeline export music            # Kaggle notebook for the 3 score candidates
+python -m pipeline ingest wan --from <download>    # verify hashes, copy clips, log GPU minutes
+python -m pipeline ingest music --from <download>
+python -m pipeline radio --music score-seed22      # hear a score candidate under the narration
+python -m pipeline music --pick score-seed22       # approve it (storyboard music.chosen)
 python -m pipeline.contact keyframes    # contact sheet of all keyframes for review
 python -m pipeline smoke                # call each provider once and record what really works
 python -m pipeline all                  # the whole film (make film); finished stages come from cache

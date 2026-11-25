@@ -6,8 +6,11 @@
   narration | keyframes | shots | music | assemble
                            run one stage
   refs                     reference sheet: options per reference; --pick jebena=2 approves one
-  radio                    build the radio cut (narration + placeholder music on black)
+  radio                    build the radio cut (narration + music on black); --music KEY auditions a score
   animatic                 the radio cut with the shots as picture (vertical 9:16)
+  export wan|music         write the Kaggle notebook for the jobs not made yet (kaggle/build/)
+  ingest wan|music         take the notebook's outputs back in: --from <folder or zip>
+  music --pick KEY         approve a score candidate (storyboard music.chosen)
 
 Options:
   --dry-run       show what would run (cached / would run / blocked); no API calls
@@ -49,9 +52,13 @@ EXIT_OK, EXIT_INVALID, EXIT_NOT_READY, EXIT_PROVIDER, EXIT_FFMPEG = 0, 1, 2, 3, 
 
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="python -m pipeline", description="Heritage Short pipeline")
-    p.add_argument("command", choices=["validate", "smoke", "refs", "radio", "animatic", "all", *STAGE_ORDER])
+    p.add_argument("command", choices=["validate", "smoke", "refs", "radio", "animatic", "export", "ingest",
+                                       "all", *STAGE_ORDER])
+    p.add_argument("target", nargs="?", default=None, help="export/ingest: wan or music")
+    p.add_argument("--from", dest="source", type=Path, default=None, help="ingest: downloaded folder or zip")
+    p.add_argument("--music", default=None, help="radio/animatic: audition this score candidate")
     p.add_argument("--options", type=int, default=4, help="refs: options per reference (default 4)")
-    p.add_argument("--pick", default=None, help="refs: approve an option, e.g. jebena=2")
+    p.add_argument("--pick", default=None, help="refs: approve an option (jebena=2); music: a candidate key")
     p.add_argument("--storyboard", type=Path, default=None, help="path to storyboard.json")
     p.add_argument("--shot", action="append", default=[], help="only this shot id (repeatable)")
     p.add_argument("--force", action="store_true", help="ignore cache, regenerate")
@@ -160,7 +167,20 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         if args.command in ("radio", "animatic"):
             from . import radio
 
-            radio.build(ctx, picture=args.command == "animatic")
+            radio.build(ctx, picture=args.command == "animatic", music_key=args.music)
+            return EXIT_OK
+        if args.command in ("export", "ingest"):
+            from . import kaggle
+
+            if args.command == "export":
+                kaggle.export(ctx, args.target)
+                return EXIT_OK
+            if args.source is None:
+                raise ValueError("ingest needs --from <downloaded folder or zip>")
+            report = kaggle.ingest(ctx, args.target, args.source)
+            return EXIT_PROVIDER if report["failed"] and not report["ingested"] else EXIT_OK
+        if args.command == "music" and args.pick:
+            print(f"[music] chosen: {music.pick(ctx, args.pick)}")
             return EXIT_OK
         if args.command == "refs":
             from . import refs
