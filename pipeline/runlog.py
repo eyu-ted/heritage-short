@@ -24,7 +24,9 @@ FIELDS = (
 )
 STATUSES = {"ok", "error", "cache_hit", "fallback", "skipped"}
 _SECRET_MARKERS = ("api_key", "apikey", "token", "secret", "authorization", "password")
-SECRET_ENV_VARS = ("GEMINI_API_KEY", "CLOUDFLARE_API_TOKEN", "KAGGLE_API_TOKEN")
+# The Cloudflare account id is not a credential, but Cloudflare puts it inside the URLs of its
+# error messages, and it should not be published in a public log (found by the pre-push scan).
+SECRET_ENV_VARS = ("GEMINI_API_KEY", "CLOUDFLARE_API_TOKEN", "KAGGLE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID")
 
 
 def _secret_values() -> list[str]:

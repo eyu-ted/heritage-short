@@ -47,4 +47,16 @@ What broke, what I tried, what fixed it. Every entry points to evidence in `runs
 ## F7. Gemini free-tier rate limits hit during testing
 - **When:** run `0bf4bd` (10:04 UTC).
 - **Symptom:** `429 RESOURCE_EXHAUSTED` on `gemini-3.8-flash-tts` (after about 16 TTS requests across five smoke runs in ~1 hour) and on `gemini-3.7-flash`.
-- **Impact and response:** the free TTS quota is the scarcest resource for narration (10 lines plus retakes). I stopped rerunning the smoke test, and the narration stage must cache every line and never re-request one that is already approved. Whether this is a per-minute or per-day limit is not known yet; the next narration run will tell.
+- **Impact and response:** the free TTS quota is the scarcest resource for narration (10 lines plus retakes). I stopped rerunning the smoke test, and the narration stage must cache every line and never re-request one that is already approved. Whether this is a per-minute or per-day limit is not known yet; the next narration run will tell. **Answered in F8.**
+
+## F8. Daily TTS quota exhausted after the first narration line
+- **When:** first real narration run, 25 Nov 10:51 UTC (`stage: narration` lines in `runs.jsonl`).
+- **Symptom:** s01 generated (9.44 s), then `429 RESOURCE_EXHAUSTED ... GenerateRequestsPerDayPerProjectPerModel-FreeTier, quotaValue: 10, retryDelay: 76072s` (about 21 hours).
+- **Cause:** the free tier allows **10 requests per model per day** for `gemini-3.8-flash-tts`. My own smoke tests had already used most of them (21 requests logged to that model today, 9 of them errors that also count). Lesson: provider checks spend the same quota as production; a smoke test should make one call per provider, not one per question.
+- **Second problem it exposed (my bug):** the retry logic retried the daily 429 three times, which can never succeed in the same run.
+- **What I tried / fixed:**
+  1. `retry.py` now recognises daily limits (`PerDay` in the quota id, or a server retry delay > 120 s) and stops immediately with a clear message. Per-minute limits are still retried. Tests use the real 429 text.
+  2. Each TTS model has its own quota, and the key also sees **`gemini-3.8-flash-lite-tts`**. Narration switched to it for the radio cut.
+  3. Built **batch narration** (all lines in one request, cut at the pauses) to make 10 requests into 1. It was rejected by its own safety check (see EXPERIMENTS E4) and fell back to one request per line.
+- **Result:** all 10 lines generated on the lite model (10:56-10:59 UTC). Three per-minute 429s on the lite model were waited out and retried successfully, which shows the daily/per-minute distinction working on real errors.
+- **Open:** the user decides by ear whether the lite voice is good enough, or whether to regenerate with `gemini-3.8-flash-tts` after its quota resets (about 08:00 UTC, 26 Nov).

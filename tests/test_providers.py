@@ -68,6 +68,14 @@ def test_real_secret_values_never_reach_the_log(repo, monkeypatch):
     assert "SUPERSECRETKEY123" not in text and "***" in text
 
 
+def test_cloudflare_account_id_in_error_urls_is_redacted(repo, monkeypatch):
+    # Real case from the pre-push scan: Cloudflare error URLs contain the account id.
+    monkeypatch.setenv("CLOUDFLARE_ACCOUNT_ID", "0123456789abcdef0123456789abcdef")
+    log_event(repo.runs_log, stage="x", status="error",
+              error="401 for url 'https://api.cloudflare.com/client/v4/accounts/0123456789abcdef0123456789abcdef/ai/run/m'")
+    assert "0123456789abcdef0123456789abcdef" not in repo.runs_log.read_text(encoding="utf-8")
+
+
 # ---- Cloudflare ------------------------------------------------------------
 
 def _cf(handler):

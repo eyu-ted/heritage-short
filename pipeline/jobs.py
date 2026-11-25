@@ -7,6 +7,10 @@ from typing import Any
 from .hashing import hash_inputs
 
 
+class NotReadyError(RuntimeError):
+    """A stage cannot run yet because something upstream (or in the storyboard) is missing."""
+
+
 @dataclass
 class Job:
     stage: str

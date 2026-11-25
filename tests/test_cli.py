@@ -9,8 +9,8 @@ from pipeline.shots import jobs as shot_jobs
 from pipeline.storyboard import load
 
 
-def test_validate_ok(repo, capsys):
-    assert main(["validate"], root=repo.root) == 0
+def test_validate_ok(blank_repo, capsys):
+    assert main(["validate"], root=blank_repo.root) == 0
     out = capsys.readouterr().out
     assert "is valid" in out
     assert "not ready for narration" in out  # Amharic not written yet

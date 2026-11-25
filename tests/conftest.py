@@ -20,3 +20,13 @@ def repo(tmp_path: Path):
 def storyboard(repo):
     with open(repo.storyboard, encoding="utf-8") as fh:
         return json.load(fh)
+
+
+@pytest.fixture
+def blank_repo(repo):
+    """The repo copy with every Amharic line emptied (the state before the script is written)."""
+    sb = json.loads(repo.storyboard.read_text(encoding="utf-8"))
+    for shot in sb["shots"]:
+        shot["narration"]["am"] = ""
+    repo.storyboard.write_text(json.dumps(sb, ensure_ascii=False), encoding="utf-8")
+    return repo

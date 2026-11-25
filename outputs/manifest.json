@@ -1,0 +1,127 @@
+{
+  "stages": {
+    "narration": {
+      "s01": {
+        "hash": "462029f444fb",
+        "meta": {
+          "duration_s": 8.331,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s01__462029f444fb.wav",
+        "produced_at": "2026-11-25T10:56:21+00:00",
+        "status": "ok"
+      },
+      "s02": {
+        "hash": "c2b12f174c70",
+        "meta": {
+          "duration_s": 8.151,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s02__c2b12f174c70.wav",
+        "produced_at": "2026-11-25T10:56:24+00:00",
+        "status": "ok"
+      },
+      "s03": {
+        "hash": "bf0a486842fc",
+        "meta": {
+          "duration_s": 7.611,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s03__bf0a486842fc.wav",
+        "produced_at": "2026-11-25T10:56:26+00:00",
+        "status": "ok"
+      },
+      "s04": {
+        "hash": "44ec275b3d59",
+        "meta": {
+          "duration_s": 7.521,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s04__44ec275b3d59.wav",
+        "produced_at": "2026-11-25T10:58:16+00:00",
+        "status": "ok"
+      },
+      "s05": {
+        "hash": "113a0c126f04",
+        "meta": {
+          "duration_s": 5.191,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s05__113a0c126f04.wav",
+        "produced_at": "2026-11-25T10:58:19+00:00",
+        "status": "ok"
+      },
+      "s06": {
+        "hash": "99cda7906f1c",
+        "meta": {
+          "duration_s": 7.121,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s06__99cda7906f1c.wav",
+        "produced_at": "2026-11-25T10:58:21+00:00",
+        "status": "ok"
+      },
+      "s07": {
+        "hash": "bd920e3a6c76",
+        "meta": {
+          "duration_s": 5.601,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s07__bd920e3a6c76.wav",
+        "produced_at": "2026-11-25T10:58:24+00:00",
+        "status": "ok"
+      },
+      "s08": {
+        "hash": "bec4a2a970b6",
+        "meta": {
+          "duration_s": 7.321,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s08__bec4a2a970b6.wav",
+        "produced_at": "2026-11-25T10:59:06+00:00",
+        "status": "ok"
+      },
+      "s09": {
+        "hash": "a41632d424c8",
+        "meta": {
+          "duration_s": 4.121,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s09__a41632d424c8.wav",
+        "produced_at": "2026-11-25T10:59:08+00:00",
+        "status": "ok"
+      },
+      "s10": {
+        "hash": "8f806fbf6772",
+        "meta": {
+          "duration_s": 5.181,
+          "mode": "single",
+          "sample_rate": 24000,
+          "voice": "Sulafat"
+        },
+        "path": "outputs/narration/s10__8f806fbf6772.wav",
+        "produced_at": "2026-11-25T10:59:11+00:00",
+        "status": "ok"
+      }
+    }
+  },
+  "version": 1
+}

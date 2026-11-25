@@ -11,6 +11,7 @@ needs a different response:
 from __future__ import annotations
 
 import random
+import re
 import time
 from typing import Callable, TypeVar
 
@@ -28,9 +29,28 @@ class TransientError(StageError):
 
 
 class QuotaError(StageError):
-    def __init__(self, message: str, retry_after: float | None = None):
+    def __init__(self, message: str, retry_after: float | None = None, daily: bool = False):
         super().__init__(message)
         self.retry_after = retry_after
+        self.daily = daily  # a per-day limit: retrying within this run can never succeed
+
+
+# A wait longer than this is not worth retrying inside one run.
+MAX_RETRY_WAIT_S = 120.0
+
+
+def _quota(message: str, retry_after: float | None = None) -> "QuotaError":
+    """Build a QuotaError, noticing daily limits and long server-requested waits.
+
+    Found in Phase 3: the free tier allows 10 TTS requests per model per day, and the
+    429 says "PerDay" and "retry in 21h". Retrying that three times only wastes time.
+    """
+    compact = message.lower().replace(" ", "")
+    daily = "perday" in compact
+    match = re.search(r"retrydelay['\"]?:\s*['\"]?(\d+(?:\.\d+)?)s", message, re.IGNORECASE)
+    if retry_after is None and match:
+        retry_after = float(match.group(1))
+    return QuotaError(message, retry_after, daily=daily or (retry_after or 0) > MAX_RETRY_WAIT_S)
 
 
 class BadInputError(StageError):
@@ -59,7 +79,7 @@ def classify(exc: BaseException) -> StageError:
                 seconds = float(retry_after) if retry_after else None
             except ValueError:
                 seconds = None
-            return QuotaError(f"HTTP 429: {exc}", seconds)
+            return _quota(f"HTTP 429: {exc}", seconds)
         if code >= 500:
             return TransientError(f"HTTP {code}: {exc}")
         return BadInputError(f"HTTP {code}: {exc}")
@@ -68,14 +88,14 @@ def classify(exc: BaseException) -> StageError:
     sdk_code = getattr(exc, "code", None)
     if isinstance(sdk_code, int) and 400 <= sdk_code < 600:
         if sdk_code == 429:
-            return QuotaError(f"HTTP 429: {exc}")
+            return _quota(f"HTTP 429: {exc}")
         if sdk_code >= 500:
             return TransientError(f"HTTP {sdk_code}: {exc}")
         return BadInputError(f"HTTP {sdk_code}: {exc}")
     if isinstance(exc, (httpx.TimeoutException, httpx.TransportError, ConnectionError, TimeoutError)):
         return TransientError(str(exc))
     if "quota" in text or "rate limit" in text or "resource_exhausted" in text:
-        return QuotaError(str(exc))
+        return _quota(str(exc))
     return BadInputError(f"{type(exc).__name__}: {exc}")
 
 
@@ -103,7 +123,8 @@ def with_retry(
             err = classify(raw)
             if on_error:
                 on_error(attempt, err)
-            if not isinstance(err, RETRYABLE) or attempt == attempts:
+            daily_limit = isinstance(err, QuotaError) and err.daily
+            if not isinstance(err, RETRYABLE) or daily_limit or attempt == attempts:
                 raise err from raw
             delay = min(max_delay, base_delay * 2 ** (attempt - 1))
             if isinstance(err, QuotaError):

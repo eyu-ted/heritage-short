@@ -97,9 +97,11 @@ def test_narration_sets_shot_length(storyboard):
 
 
 def test_check_ready_reports_missing_amharic(storyboard):
-    problems = check_ready(storyboard, "narration")
-    assert problems and "Amharic" in problems[0]
     sb = copy.deepcopy(storyboard)
+    for s in sb["shots"]:
+        s["narration"]["am"] = ""
+    problems = check_ready(sb, "narration")
+    assert problems and "Amharic" in problems[0]
     for s in sb["shots"]:
         s["narration"]["am"] = "ቡና"
     assert check_ready(sb, "narration") == []

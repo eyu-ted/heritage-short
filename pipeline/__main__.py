@@ -5,12 +5,16 @@
   all                      run every stage in order (what `make film` calls)
   narration | keyframes | shots | music | assemble
                            run one stage
+  radio                    build the radio cut (narration + placeholder music on black)
 
 Options:
   --dry-run       show what would run (cached / would run / blocked); no API calls
   --shot s07      limit shot-based stages to one shot (repeatable)
   --force         ignore the cache and regenerate
   --offline       never call a provider; use the cache or fail clearly
+
+Exit codes: 0 ok, 1 invalid storyboard/usage, 2 not ready (upstream missing),
+            3 provider failure (quota, outage, bad input), 4 FFmpeg failure.
 """
 from __future__ import annotations
 
@@ -21,9 +25,12 @@ from types import ModuleType
 
 from . import assemble, keyframes, music, narration, shots
 from .cache import Manifest
-from .config import STAGE_ORDER, get_paths
+from .config import STAGE_ORDER, MissingSecretError, get_paths, load_env
 from .context import Context
-from .jobs import Job
+from .ffmpeg import FFmpegError
+from .jobs import Job, NotReadyError
+from .retry import StageError
+from .runlog import log_event
 from .storyboard import StoryboardError, check_ready, load, planned_duration
 
 STAGES: dict[str, ModuleType] = {
@@ -35,12 +42,12 @@ STAGES: dict[str, ModuleType] = {
 }
 SHOT_STAGES = {"narration", "keyframes", "shots"}
 
-EXIT_OK, EXIT_INVALID, EXIT_NOT_READY = 0, 1, 2
+EXIT_OK, EXIT_INVALID, EXIT_NOT_READY, EXIT_PROVIDER, EXIT_FFMPEG = 0, 1, 2, 3, 4
 
 
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="python -m pipeline", description="Heritage Short pipeline")
-    p.add_argument("command", choices=["validate", "smoke", "all", *STAGE_ORDER])
+    p.add_argument("command", choices=["validate", "smoke", "radio", "all", *STAGE_ORDER])
     p.add_argument("--storyboard", type=Path, default=None, help="path to storyboard.json")
     p.add_argument("--shot", action="append", default=[], help="only this shot id (repeatable)")
     p.add_argument("--force", action="store_true", help="ignore cache, regenerate")
@@ -76,6 +83,28 @@ def _print_plan(ctx: Context, stages: list[str]) -> None:
     print(f"cached: {counts['cached']}   would run: {counts['would run']}   blocked: {counts['blocked']}")
 
 
+def _run_stage(ctx: Context, stage: str) -> None:
+    module = STAGES[stage]
+    selected = _select(stage, module.jobs(ctx.sb, ctx.manifest), ctx.shot_ids)
+    blocked = [j for j in selected if j.blocked]
+    if blocked:
+        raise NotReadyError(f"{stage}: {len(blocked)} job(s) blocked, e.g. {blocked[0].key}: {blocked[0].blocked}")
+
+    todo = []
+    for job in selected:
+        if not ctx.force and ctx.manifest.is_fresh(job):
+            entry = ctx.manifest.entry(stage, job.key)
+            log_event(ctx.paths.runs_log, stage=stage, shot_id=job.key, model=job.inputs.get("model"),
+                      input_hash=job.hash, output=entry["path"], status="cache_hit")
+        else:
+            todo.append(job)
+    print(f"[{stage}] {len(selected) - len(todo)} cached, {len(todo)} to generate")
+    if todo and ctx.offline:
+        raise NotReadyError(f"{stage}: --offline but {len(todo)} job(s) are not cached: "
+                            f"{[j.key for j in todo]}")
+    module.run(ctx, todo)
+
+
 def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
     args = _parser().parse_args(argv)
     paths = get_paths(root)
@@ -92,14 +121,8 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
         print(f"unknown shot id(s): {unknown}", file=sys.stderr)
         return EXIT_INVALID
 
-    ctx = Context(
-        paths=paths,
-        sb=sb,
-        manifest=Manifest(paths),
-        force=args.force,
-        offline=args.offline,
-        shot_ids=tuple(args.shot),
-    )
+    ctx = Context(paths=paths, sb=sb, manifest=Manifest(paths), force=args.force,
+                  offline=args.offline, shot_ids=tuple(args.shot))
 
     if args.command == "validate":
         print(f"OK: storyboard '{sb['project']['title']}' is valid")
@@ -109,28 +132,41 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
                 print(f"  not ready for {stage}: {problem}")
         return EXIT_OK
 
-    if args.command == "smoke":
-        from . import smoke
-
-        return smoke.run(paths, sb)
-
-    stages = list(STAGE_ORDER) if args.command == "all" else [args.command]
-
+    stages = list(STAGE_ORDER) if args.command == "all" else (
+        [args.command] if args.command in STAGES else [])
     if args.dry_run:
         _print_plan(ctx, stages)
         return EXIT_OK
 
-    for stage in stages:
-        module = STAGES[stage]
-        todo = [
-            j for j in _select(stage, module.jobs(ctx.sb, ctx.manifest), ctx.shot_ids)
-            if args.force or not ctx.manifest.is_fresh(j)
-        ]
-        try:
-            module.run(ctx, todo)
-        except NotImplementedError as err:
-            print(f"[{stage}] not available yet: {err}", file=sys.stderr)
-            return EXIT_NOT_READY
+    load_env(paths)
+    try:
+        if args.command == "smoke":
+            from . import smoke
+
+            return smoke.run(paths, sb)
+        if args.command == "radio":
+            from . import radio
+
+            radio.build(ctx)
+            return EXIT_OK
+        for stage in stages:
+            _run_stage(ctx, stage)
+    except NotImplementedError as err:
+        print(f"not available yet: {err}", file=sys.stderr)
+        return EXIT_NOT_READY
+    except NotReadyError as err:
+        print(f"not ready: {err}", file=sys.stderr)
+        return EXIT_NOT_READY
+    except MissingSecretError as err:
+        print(f"missing secret: {err}", file=sys.stderr)
+        return EXIT_PROVIDER
+    except StageError as err:
+        print(f"provider failure ({type(err).__name__}): {err}\n"
+              "Finished work is cached; rerun the same command to continue.", file=sys.stderr)
+        return EXIT_PROVIDER
+    except FFmpegError as err:
+        print(f"FFmpeg failure: {err}", file=sys.stderr)
+        return EXIT_FFMPEG
     return EXIT_OK
 
 
