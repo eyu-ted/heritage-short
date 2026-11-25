@@ -1,0 +1,27 @@
+[
+  {
+    "name": "@cf/black-forest-labs/flux-2-klein-9b",
+    "task": "Text-to-Image",
+    "description": "FLUX.2 [klein] 9B is a 9 billion parameter model that can generate images from text descriptions and supports multi-reference editing capabilities."
+  },
+  {
+    "name": "@cf/deepgram/flux",
+    "task": "Automatic Speech Recognition",
+    "description": "Flux is the first conversational speech recognition model built specifically for voice agents."
+  },
+  {
+    "name": "@cf/black-forest-labs/flux-1-schnell",
+    "task": "Text-to-Image",
+    "description": "FLUX.1 [schnell] is a 12 billion parameter rectified flow transformer capable of generating images from text descriptions. "
+  },
+  {
+    "name": "@cf/black-forest-labs/flux-2-klein-4b",
+    "task": "Text-to-Image",
+    "description": "FLUX.2 [klein] is an ultra-fast, distilled image model. It unifies image generation and editing in a single model, delivering state-of-the-art quality enabling "
+  },
+  {
+    "name": "@cf/black-forest-labs/flux-2-dev",
+    "task": "Text-to-Image",
+    "description": "FLUX.2 [dev] is an image model from Black Forest Labs where you can generate highly realistic and detailed images, with multi-reference support."
+  }
+]

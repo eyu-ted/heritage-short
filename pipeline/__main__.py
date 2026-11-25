@@ -1,6 +1,7 @@
 """Command line: python -m pipeline <command> [options]
 
   validate                 check storyboard.json against the schema and semantic rules
+  smoke                    call every provider once; record what really works (Phase 2)
   all                      run every stage in order (what `make film` calls)
   narration | keyframes | shots | music | assemble
                            run one stage
@@ -39,7 +40,7 @@ EXIT_OK, EXIT_INVALID, EXIT_NOT_READY = 0, 1, 2
 
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="python -m pipeline", description="Heritage Short pipeline")
-    p.add_argument("command", choices=["validate", "all", *STAGE_ORDER])
+    p.add_argument("command", choices=["validate", "smoke", "all", *STAGE_ORDER])
     p.add_argument("--storyboard", type=Path, default=None, help="path to storyboard.json")
     p.add_argument("--shot", action="append", default=[], help="only this shot id (repeatable)")
     p.add_argument("--force", action="store_true", help="ignore cache, regenerate")
@@ -107,6 +108,11 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             for problem in check_ready(sb, stage):
                 print(f"  not ready for {stage}: {problem}")
         return EXIT_OK
+
+    if args.command == "smoke":
+        from . import smoke
+
+        return smoke.run(paths, sb)
 
     stages = list(STAGE_ORDER) if args.command == "all" else [args.command]
 

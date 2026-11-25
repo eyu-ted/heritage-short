@@ -59,6 +59,14 @@ Legend: 🤖 = I do it · 🧑 = you do it · ⏳ = long wait (start early, do o
 - FLUX.2 klein free? Else FLUX.1 schnell.
 - Update the **[VERIFY]** items in PLAN.md.
 
+**Gate 1 result (25 Nov, smoke runs `94a69d` to `0bf4bd`):**
+- Narration: **Amharic** with `gemini-3.8-flash-tts` (API v1beta), voice `Sulafat`, style in `speech_metadata`. Approved by a native speaker.
+- Keyframes: **FLUX.2 klein-4b** (Apache 2.0) on Cloudflare: honours size (1344x768) and accepts up to 4 reference images. FLUX.1 schnell kept only as a fallback (no seed, no size).
+- Seeds do **not** reproduce images on Cloudflare (E2) → keep approved images; consistency comes from reference images.
+- Gemini text is unreliable right now (503/429) → Amharic lines written/reviewed by the user; Gemini is an optional helper.
+- Free Gemini TTS quota is tight (429 after ~16 calls) → cache every narration line; no needless smoke reruns.
+- Kaggle token works.
+
 ---
 
 ## Phase 3 — Story and the radio cut (≈2.5 h)

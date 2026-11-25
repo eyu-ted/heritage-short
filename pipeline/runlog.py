@@ -24,16 +24,25 @@ FIELDS = (
 )
 STATUSES = {"ok", "error", "cache_hit", "fallback", "skipped"}
 _SECRET_MARKERS = ("api_key", "apikey", "token", "secret", "authorization", "password")
+SECRET_ENV_VARS = ("GEMINI_API_KEY", "CLOUDFLARE_API_TOKEN", "KAGGLE_API_TOKEN")
 
 
-def _redact(value: Any) -> Any:
+def _secret_values() -> list[str]:
+    return [v for v in (os.environ.get(n, "").strip() for n in SECRET_ENV_VARS) if len(v) >= 8]
+
+
+def _redact(value: Any, secrets_: list[str]) -> Any:
+    """Blank out secret-looking keys, and any real secret value that leaked into a string."""
     if isinstance(value, dict):
         return {
-            k: "***" if any(m in str(k).lower() for m in _SECRET_MARKERS) else _redact(v)
+            k: "***" if any(m in str(k).lower() for m in _SECRET_MARKERS) else _redact(v, secrets_)
             for k, v in value.items()
         }
     if isinstance(value, list):
-        return [_redact(v) for v in value]
+        return [_redact(v, secrets_) for v in value]
+    if isinstance(value, str):
+        for s in secrets_:
+            value = value.replace(s, "***")
     return value
 
 
@@ -49,8 +58,9 @@ def log_event(path: Path | str, **fields: Any) -> dict[str, Any]:
         "ts": datetime.now(timezone.utc).isoformat(timespec="milliseconds"),
         "run_id": RUN_ID,
     }
+    secrets_ = _secret_values()
     for name in FIELDS:
-        record[name] = _redact(fields.get(name))
+        record[name] = _redact(fields.get(name), secrets_)
 
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)

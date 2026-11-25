@@ -63,6 +63,15 @@ def classify(exc: BaseException) -> StageError:
         if code >= 500:
             return TransientError(f"HTTP {code}: {exc}")
         return BadInputError(f"HTTP {code}: {exc}")
+    # SDK errors (e.g. google.genai.errors.APIError) carry the HTTP status as an int `code`.
+    # Found in the Phase 2 smoke test: a Gemini 503 "high demand" was misread as bad input.
+    sdk_code = getattr(exc, "code", None)
+    if isinstance(sdk_code, int) and 400 <= sdk_code < 600:
+        if sdk_code == 429:
+            return QuotaError(f"HTTP 429: {exc}")
+        if sdk_code >= 500:
+            return TransientError(f"HTTP {sdk_code}: {exc}")
+        return BadInputError(f"HTTP {sdk_code}: {exc}")
     if isinstance(exc, (httpx.TimeoutException, httpx.TransportError, ConnectionError, TimeoutError)):
         return TransientError(str(exc))
     if "quota" in text or "rate limit" in text or "resource_exhausted" in text:

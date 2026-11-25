@@ -74,9 +74,20 @@ def test_on_error_sees_every_failure():
     assert seen == [(1, "TransientError"), (2, "TransientError")]
 
 
+class SdkError(Exception):
+    """Shape of google.genai.errors.APIError: an int `code` attribute."""
+
+    def __init__(self, code, message):
+        super().__init__(f"{code} {message}")
+        self.code = code
+
+
 @pytest.mark.parametrize(
     "exc, kind",
     [
+        (SdkError(503, "UNAVAILABLE high demand"), TransientError),  # the real smoke-test case
+        (SdkError(429, "RESOURCE_EXHAUSTED"), QuotaError),
+        (SdkError(400, "INVALID_ARGUMENT"), BadInputError),
         (_http_error(429), QuotaError),
         (_http_error(503), TransientError),
         (_http_error(401), BadInputError),

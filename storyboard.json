@@ -16,8 +16,8 @@
 
   "models": {
     "text": "gemini-3.8-flash",
-    "tts": "gemini-3.1-flash-tts-preview",
-    "image": "@cf/black-forest-labs/flux-1-schnell",
+    "tts": "gemini-3.8-flash-tts",
+    "image": "@cf/black-forest-labs/flux-2-klein-4b",
     "video": "Wan-AI/Wan2.2-TI2V-5B-Diffusers",
     "music": "ACE-Step/Ace-Step1.5"
   },
