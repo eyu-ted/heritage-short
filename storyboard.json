@@ -1,0 +1,225 @@
+{
+  "version": 1,
+  "notes": "DRAFT v0 (Phase 1). Amharic narration is filled in step S3.2. Model ids are checked by the smoke test in Phase 2. English lines are placeholders until the real family anchor is added.",
+
+  "project": {
+    "title": "Buna",
+    "logline": "Three small cups, three rounds, and nobody is left out.",
+    "language": "am",
+    "subtitle_language": "en",
+    "audience": "Young Ethiopians and diaspora family members, watching on a phone in a social feed, mostly vertical.",
+    "intent": "They slow down and feel belonging: the ceremony is not about coffee, it is about time and being together.",
+    "outputs": ["9x16", "16x9"],
+    "reframe": "center_crop",
+    "target_duration_s": { "min": 60, "max": 90 }
+  },
+
+  "models": {
+    "text": "gemini-3.8-flash",
+    "tts": "gemini-3.1-flash-tts-preview",
+    "image": "@cf/black-forest-labs/flux-1-schnell",
+    "video": "Wan-AI/Wan2.2-TI2V-5B-Diffusers",
+    "music": "ACE-Step/Ace-Step1.5"
+  },
+
+  "render": {
+    "fps": 24,
+    "keyframe_size": [1344, 768],
+    "image_steps": 4,
+    "video_resolution": "480p",
+    "narration_pad_s": 1.0,
+    "crossfade_s": 0.5
+  },
+
+  "style_block": "Hand-painted illustration with visible brush texture, warm golden morning light, soft film grain, earthy palette of terracotta, amber, charcoal black and fresh green, gentle depth of field, intimate and calm, a modest Ethiopian home, main subject centred with generous empty margins on every side, no text, no letters, no logos.",
+
+  "references": [
+    {
+      "id": "figure",
+      "description": "An elderly Ethiopian woman always seen from behind or in silhouette, never showing her face, wrapped in a white cotton netela shawl with a narrow woven coloured border (tibeb).",
+      "seed": 101,
+      "image": null
+    },
+    {
+      "id": "props",
+      "description": "A black clay jebena coffee pot with a round belly and a long thin neck, small white handleless sini cups on a low wooden rekebot tray, fresh long green grass strewn on the floor, a small charcoal brazier.",
+      "seed": 102,
+      "image": null
+    }
+  ],
+
+  "narration_defaults": {
+    "voice": "Sulafat",
+    "style": "Speak slowly, warmly and gently, like an elder remembering a morning ritual."
+  },
+
+  "shots": [
+    {
+      "id": "s01", "order": 1, "act": "prologue",
+      "reason": "Establishing shot: where and when we are, and the slow pace of the morning.",
+      "narration": { "am": "", "en": "Before the city wakes, the grass is spread." },
+      "keyframe": {
+        "prompt": "Wide establishing view of a modest home courtyard at dawn, fresh long green grass strewn across the earthen floor, a low wooden stool and a small charcoal brazier waiting in the centre, soft mist and first golden light through an open doorway",
+        "seed": 1001, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "kenburns", "prompt": "mist drifts slowly, light brightens; camera pushes in very slowly",
+        "seed": 2001, "fallback": "kenburns", "kenburns": { "zoom": 1.08, "pan": "none" }
+      },
+      "min_duration_s": 7, "transition": "crossfade"
+    },
+    {
+      "id": "s02", "order": 2, "act": "prologue",
+      "reason": "The first object of the ritual; sets a patient, tactile rhythm.",
+      "narration": { "am": "", "en": "The day begins with beans, and patience." },
+      "keyframe": {
+        "prompt": "Close-up of green unroasted coffee beans being rinsed in water inside a round dark clay bowl, droplets catching soft morning light, fingertips only partly visible at the edge of the frame",
+        "seed": 1002, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "kenburns", "prompt": "water ripples gently around the beans; camera fixed",
+        "seed": 2002, "fallback": "kenburns", "kenburns": { "zoom": 1.06, "pan": "right" }
+      },
+      "min_duration_s": 7, "transition": "crossfade"
+    },
+    {
+      "id": "s03", "order": 3, "act": "abol",
+      "reason": "Sensory hook of the first round: fire and the smell that gathers people.",
+      "narration": { "am": "", "en": "Fire, and the smell that calls the neighbours." },
+      "keyframe": {
+        "prompt": "Close-up of coffee beans roasting in a flat round iron pan over glowing charcoal, beans turning from pale green to deep brown, thin curls of smoke rising into warm light",
+        "seed": 1003, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "wan", "prompt": "smoke rises and curls slowly, the beans shift gently in the pan; camera fixed",
+        "seed": 2003, "fallback": "kenburns", "kenburns": { "zoom": 1.05, "pan": "up" }
+      },
+      "min_duration_s": 7, "transition": "crossfade"
+    },
+    {
+      "id": "s04", "order": 4, "act": "abol",
+      "reason": "Mood and welcome without hands or faces; incense is part of the ceremony.",
+      "narration": { "am": "", "en": "Smoke carries our welcome." },
+      "keyframe": {
+        "prompt": "Fragrant frankincense smoke curling up from a small clay incense burner resting on fresh grass, strongly backlit by golden light against a dark warm background",
+        "seed": 1004, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "kenburns", "prompt": "incense smoke curls upward slowly; camera fixed",
+        "seed": 2004, "fallback": "kenburns", "kenburns": { "zoom": 1.08, "pan": "up" }
+      },
+      "min_duration_s": 6, "transition": "crossfade"
+    },
+    {
+      "id": "s05", "order": 5, "act": "abol",
+      "reason": "Rhythm of grinding links the picture to the score.",
+      "narration": { "am": "", "en": "The grinding is the first music of the day." },
+      "keyframe": {
+        "prompt": "Close-up of a traditional wooden mortar filled with dark roasted coffee beans and a metal pestle, the top of the pestle held by a softly out-of-focus hand, warm side light",
+        "seed": 1005, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "kenburns", "prompt": "the pestle moves down slowly into the mortar; camera fixed",
+        "seed": 2005, "fallback": "kenburns", "kenburns": { "zoom": 1.05, "pan": "left" }
+      },
+      "min_duration_s": 6, "transition": "crossfade"
+    },
+    {
+      "id": "s06", "order": 6, "act": "tona",
+      "reason": "A breath in the pacing: waiting is part of the gift.",
+      "narration": { "am": "", "en": "Then we wait. Waiting is part of the gift." },
+      "keyframe": {
+        "prompt": "A black clay jebena coffee pot resting on glowing charcoal, gentle steam rising from its spout, deep warm shadows, calm and still",
+        "seed": 1006, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "kenburns", "prompt": "steam rises gently from the spout; camera fixed",
+        "seed": 2006, "fallback": "kenburns", "kenburns": { "zoom": 1.04, "pan": "none" }
+      },
+      "min_duration_s": 7, "transition": "crossfade"
+    },
+    {
+      "id": "s07", "order": 7, "act": "tona",
+      "reason": "Hero shot and recurring motif: one pot pouring into many cups.",
+      "narration": { "am": "", "en": "One pot. Many cups. No one is left out." },
+      "keyframe": {
+        "prompt": "A black clay jebena tilted high above a low wooden tray, a thin unbroken stream of dark coffee pouring into a row of small white handleless cups, steam rising, warm golden light",
+        "seed": 1007, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "wan", "prompt": "the coffee stream pours steadily into the cups, steam rises; camera fixed",
+        "seed": 2007, "fallback": "kenburns", "kenburns": { "zoom": 1.05, "pan": "none" }
+      },
+      "min_duration_s": 8, "transition": "crossfade"
+    },
+    {
+      "id": "s08", "order": 8, "act": "baraka",
+      "reason": "The human presence of the film, shown from behind to avoid any real likeness.",
+      "narration": { "am": "", "en": "Three rounds: abol, tona, baraka." },
+      "keyframe": {
+        "prompt": "An elderly woman seen only from behind, seated on a low wooden stool, holding out a small white cup toward the viewer, soft backlight around her shawl, face not visible",
+        "seed": 1008, "refs": ["figure", "props"]
+      },
+      "motion": {
+        "backend": "kenburns", "prompt": "she holds the cup out, slight movement of the shawl; camera fixed",
+        "seed": 2008, "fallback": "kenburns", "kenburns": { "zoom": 1.05, "pan": "none" }
+      },
+      "min_duration_s": 7, "transition": "crossfade"
+    },
+    {
+      "id": "s09", "order": 9, "act": "baraka",
+      "reason": "Emotional peak: the blessing round, community implied by waiting seats.",
+      "narration": { "am": "", "en": "The third round is the blessing." },
+      "keyframe": {
+        "prompt": "A row of small white coffee cups on a wooden tray with wisps of steam, a woven basket of roasted popcorn beside them, empty low stools around in warm light as if people are about to gather",
+        "seed": 1009, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "kenburns", "prompt": "steam drifts from the cups; camera fixed",
+        "seed": 2009, "fallback": "kenburns", "kenburns": { "zoom": 1.06, "pan": "right" }
+      },
+      "min_duration_s": 7, "transition": "crossfade"
+    },
+    {
+      "id": "s10", "order": 10, "act": "close",
+      "reason": "Closing motif that answers shot 1: the door opens, the invitation stays.",
+      "narration": { "am": "", "en": "Stay a little longer. The coffee is still warm." },
+      "keyframe": {
+        "prompt": "A wooden door opening from the courtyard onto bright morning light, fresh grass on the floor, the jebena resting by the brazier in the foreground",
+        "seed": 1010, "refs": ["props"]
+      },
+      "motion": {
+        "backend": "wan", "prompt": "the door swings open slowly and light floods in; camera fixed",
+        "seed": 2010, "fallback": "kenburns", "kenburns": { "zoom": 1.06, "pan": "none" }
+      },
+      "min_duration_s": 8, "transition": "crossfade"
+    }
+  ],
+
+  "music": {
+    "cues": [
+      {
+        "id": "score",
+        "caption": "Ethiopian-inspired acoustic instrumental, plucked krar lyre, soft bowed masenqo, gentle hand percussion entering midway, warm, intimate, unhurried, sparse texture with no strong lead melody, a simple theme that returns at the end",
+        "bpm": 72,
+        "key": null,
+        "duration_s": 75,
+        "instrumental": true,
+        "seeds": [11, 22, 33]
+      }
+    ],
+    "chosen": null
+  },
+
+  "mix": {
+    "duck": { "threshold": 0.02, "ratio": 6, "attack_ms": 300, "release_ms": 1500 },
+    "loudness": { "I": -14, "TP": -1 },
+    "narration_offset_s": 0.4
+  },
+
+  "endcard": {
+    "text": "Made with AI",
+    "subtitle": "Buna - a Heritage Short",
+    "duration_s": 3
+  }
+}

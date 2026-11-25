@@ -1,0 +1,258 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "heritage-short/storyboard.schema.json",
+  "title": "Heritage Short storyboard (the contract between every pipeline stage)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version", "project", "models", "render", "style_block", "references",
+    "narration_defaults", "shots", "music", "mix", "endcard"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "notes": { "type": "string" },
+
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title", "logline", "language", "subtitle_language", "audience",
+        "intent", "outputs", "reframe", "target_duration_s"
+      ],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "logline": { "type": "string", "minLength": 10 },
+        "language": { "type": "string", "pattern": "^[a-z]{2,3}$" },
+        "subtitle_language": { "type": "string", "pattern": "^[a-z]{2,3}$" },
+        "audience": { "type": "string", "minLength": 10 },
+        "intent": { "type": "string", "minLength": 10 },
+        "outputs": {
+          "type": "array",
+          "items": { "enum": ["9x16", "16x9"] },
+          "minItems": 2,
+          "uniqueItems": true
+        },
+        "reframe": { "enum": ["center_crop", "blur_pad"] },
+        "target_duration_s": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["min", "max"],
+          "properties": {
+            "min": { "type": "number", "minimum": 60 },
+            "max": { "type": "number", "maximum": 90 }
+          }
+        }
+      }
+    },
+
+    "models": {
+      "description": "Model ids live here, not in code, so changing a model invalidates the right caches and is visible in review.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "tts", "image", "video", "music"],
+      "properties": {
+        "text": { "type": "string", "minLength": 1 },
+        "tts": { "type": "string", "minLength": 1 },
+        "image": { "type": "string", "minLength": 1 },
+        "video": { "type": "string", "minLength": 1 },
+        "music": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "render": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fps", "keyframe_size", "image_steps", "video_resolution", "narration_pad_s", "crossfade_s"],
+      "properties": {
+        "fps": { "type": "integer", "minimum": 12, "maximum": 60 },
+        "keyframe_size": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 256, "maximum": 2048 },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "image_steps": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "video_resolution": { "enum": ["480p", "720p"] },
+        "narration_pad_s": { "type": "number", "minimum": 0, "maximum": 3 },
+        "crossfade_s": { "type": "number", "minimum": 0, "maximum": 2 }
+      }
+    },
+
+    "style_block": {
+      "description": "Fixed look description appended to every image prompt.",
+      "type": "string",
+      "minLength": 20
+    },
+
+    "references": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+          "description": { "type": "string", "minLength": 10 },
+          "seed": { "$ref": "#/$defs/seed" },
+          "image": { "type": ["string", "null"] }
+        }
+      }
+    },
+
+    "narration_defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["voice", "style"],
+      "properties": {
+        "voice": { "type": "string", "minLength": 1 },
+        "style": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "shots": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 12,
+      "items": { "$ref": "#/$defs/shot" }
+    },
+
+    "music": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cues", "chosen"],
+      "properties": {
+        "cues": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "caption", "bpm", "duration_s", "instrumental", "seeds"],
+            "properties": {
+              "id": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+              "caption": { "type": "string", "minLength": 10 },
+              "bpm": { "type": "integer", "minimum": 40, "maximum": 200 },
+              "key": { "type": ["string", "null"] },
+              "duration_s": { "type": "number", "minimum": 10, "maximum": 240 },
+              "instrumental": { "type": "boolean" },
+              "seeds": {
+                "type": "array",
+                "items": { "$ref": "#/$defs/seed" },
+                "minItems": 1,
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "chosen": {
+          "description": "The selected candidate, as '<cue id>-seed<seed>', or null before choosing.",
+          "type": ["string", "null"]
+        }
+      }
+    },
+
+    "mix": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["duck", "loudness", "narration_offset_s"],
+      "properties": {
+        "duck": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["threshold", "ratio", "attack_ms", "release_ms"],
+          "properties": {
+            "threshold": { "type": "number", "exclusiveMinimum": 0, "maximum": 1 },
+            "ratio": { "type": "number", "minimum": 1, "maximum": 20 },
+            "attack_ms": { "type": "number", "minimum": 0.01, "maximum": 2000 },
+            "release_ms": { "type": "number", "minimum": 0.01, "maximum": 9000 }
+          }
+        },
+        "loudness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["I", "TP"],
+          "properties": {
+            "I": { "type": "number", "minimum": -30, "maximum": -5 },
+            "TP": { "type": "number", "minimum": -9, "maximum": 0 }
+          }
+        },
+        "narration_offset_s": { "type": "number", "minimum": 0, "maximum": 2 }
+      }
+    },
+
+    "endcard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "duration_s"],
+      "properties": {
+        "text": { "type": "string", "minLength": 3 },
+        "subtitle": { "type": "string" },
+        "duration_s": { "type": "number", "minimum": 2, "maximum": 4 }
+      }
+    }
+  },
+
+  "$defs": {
+    "seed": { "type": "integer", "minimum": 0, "maximum": 2147483647 },
+
+    "shot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "order", "act", "reason", "narration", "keyframe", "motion", "min_duration_s"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^s[0-9]{2}$" },
+        "order": { "type": "integer", "minimum": 1 },
+        "act": { "enum": ["prologue", "abol", "tona", "baraka", "close"] },
+        "reason": {
+          "description": "Why this shot exists. Required for every shot.",
+          "type": "string",
+          "minLength": 10
+        },
+        "narration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["am", "en"],
+          "properties": {
+            "am": { "type": "string", "description": "Narration in the film's language. May be empty until the script step." },
+            "en": { "type": "string", "minLength": 1, "maxLength": 160, "description": "English subtitle text." },
+            "voice": { "type": "string" },
+            "style": { "type": "string" }
+          }
+        },
+        "keyframe": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["prompt", "seed", "refs"],
+          "properties": {
+            "prompt": { "type": "string", "minLength": 10 },
+            "seed": { "$ref": "#/$defs/seed" },
+            "refs": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+          }
+        },
+        "motion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["backend", "prompt", "seed", "fallback", "kenburns"],
+          "properties": {
+            "backend": { "enum": ["wan", "kenburns"] },
+            "prompt": { "type": "string", "minLength": 5, "description": "Motion and camera only; the image already holds the subject." },
+            "seed": { "$ref": "#/$defs/seed" },
+            "fallback": { "enum": ["kenburns", "none"] },
+            "kenburns": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["zoom", "pan"],
+              "properties": {
+                "zoom": { "type": "number", "minimum": 1.0, "maximum": 1.5 },
+                "pan": { "enum": ["none", "left", "right", "up", "down"] }
+              }
+            }
+          }
+        },
+        "min_duration_s": { "type": "number", "minimum": 3, "maximum": 15 },
+        "transition": { "enum": ["cut", "crossfade"] }
+      }
+    }
+  }
+}
