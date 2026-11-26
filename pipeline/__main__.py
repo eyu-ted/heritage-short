@@ -10,7 +10,9 @@
   animatic                 the radio cut with the shots as picture (vertical 9:16)
   export wan|music         write the Kaggle notebook for the jobs not made yet (kaggle/build/)
   ingest wan|music         take the notebook's outputs back in: --from <folder or zip>
+  costs                    (re)write COSTS.md from runs.jsonl (calls, latency, units, list-price estimate)
   music --pick KEY         approve a score candidate (storyboard music.chosen)
+  narration --repair-c2pa  cut Google's C2PA credential out of recorded lines' audio (FAILURES F11)
 
 Options:
   --dry-run       show what would run (cached / would run / blocked); no API calls
@@ -53,12 +55,14 @@ EXIT_OK, EXIT_INVALID, EXIT_NOT_READY, EXIT_PROVIDER, EXIT_FFMPEG = 0, 1, 2, 3, 
 def _parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="python -m pipeline", description="Heritage Short pipeline")
     p.add_argument("command", choices=["validate", "smoke", "refs", "radio", "animatic", "export", "ingest",
-                                       "all", *STAGE_ORDER])
+                                       "costs", "all", *STAGE_ORDER])
     p.add_argument("target", nargs="?", default=None, help="export/ingest: wan or music")
     p.add_argument("--from", dest="source", type=Path, default=None, help="ingest: downloaded folder or zip")
     p.add_argument("--music", default=None, help="radio/animatic: audition this score candidate")
     p.add_argument("--options", type=int, default=4, help="refs: options per reference (default 4)")
     p.add_argument("--pick", default=None, help="refs: approve an option (jebena=2); music: a candidate key")
+    p.add_argument("--repair-c2pa", action="store_true",
+                   help="narration: cut the C2PA credential out of already-recorded lines (FAILURES F11)")
     p.add_argument("--storyboard", type=Path, default=None, help="path to storyboard.json")
     p.add_argument("--shot", action="append", default=[], help="only this shot id (repeatable)")
     p.add_argument("--force", action="store_true", help="ignore cache, regenerate")
@@ -117,7 +121,8 @@ def _run_stage(ctx: Context, stage: str) -> None:
         else:
             todo.append(job)
     print(f"[{stage}] {len(selected) - len(todo)} cached, {len(todo)} to generate, {len(blocked)} blocked")
-    if todo and ctx.offline:
+    # --offline forbids provider calls, not local work: FFmpeg stages (LOCAL = True) still run.
+    if todo and ctx.offline and not getattr(module, "LOCAL", False):
         raise NotReadyError(f"{stage}: --offline but {len(todo)} job(s) are not cached: "
                             f"{[j.key for j in todo]}")
     module.run(ctx, todo)
@@ -179,6 +184,15 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
                 raise ValueError("ingest needs --from <downloaded folder or zip>")
             report = kaggle.ingest(ctx, args.target, args.source)
             return EXIT_PROVIDER if report["failed"] and not report["ingested"] else EXIT_OK
+        if args.command == "costs":
+            from . import costs
+
+            costs.write(ctx, STAGES, _fresh)
+            return EXIT_OK
+        if args.command == "narration" and args.repair_c2pa:
+            repaired = narration.repair_c2pa(ctx)
+            print(f"[narration] repaired {len(repaired)} line(s): {repaired or 'none needed'}")
+            return EXIT_OK
         if args.command == "music" and args.pick:
             print(f"[music] chosen: {music.pick(ctx, args.pick)}")
             return EXIT_OK
@@ -194,7 +208,15 @@ def main(argv: list[str] | None = None, *, root: Path | None = None) -> int:
             refs.run(ctx, todo)
             return EXIT_OK
         for stage in stages:
-            _run_stage(ctx, stage)
+            try:
+                _run_stage(ctx, stage)
+            except NotReadyError as err:
+                # The score is made on Kaggle, outside this run. In `all` a missing score must not
+                # stop the film: assembly uses the chosen score, or the placeholder bed until one is chosen.
+                if not (stage == "music" and args.command == "all"):
+                    raise
+                print(f"[music] note: {err}\n[music] continuing: the film uses "
+                      f"{ctx.sb['music']['chosen'] or 'the placeholder bed (no score chosen yet)'}")
     except NotImplementedError as err:
         print(f"not available yet: {err}", file=sys.stderr)
         return EXIT_NOT_READY

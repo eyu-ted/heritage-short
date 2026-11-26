@@ -12,7 +12,11 @@ def repo(tmp_path: Path):
     """A throwaway copy of the repo's contract files, so tests never touch real outputs/ or runs.jsonl."""
     (tmp_path / "schema").mkdir()
     shutil.copy(ROOT / "schema" / "storyboard.schema.json", tmp_path / "schema")
-    shutil.copy(ROOT / "storyboard.json", tmp_path / "storyboard.json")
+    sb = json.loads((ROOT / "storyboard.json").read_text(encoding="utf-8"))
+    # The live storyboard names an approved score; this copy has no outputs/, so the score was never
+    # ingested here. Tests start from "no score chosen" and set it themselves when they need one.
+    sb["music"]["chosen"] = None
+    (tmp_path / "storyboard.json").write_text(json.dumps(sb, ensure_ascii=False, indent=2), encoding="utf-8")
     return get_paths(tmp_path)
 
 

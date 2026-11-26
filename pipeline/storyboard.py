@@ -131,5 +131,5 @@ def check_ready(sb: dict[str, Any], stage: str) -> list[str]:
         if empty:
             problems.append(f"Amharic narration is empty for {empty} (step S3.2)")
     if stage == "assemble" and sb["music"]["chosen"] is None:
-        problems.append("no music candidate chosen yet (step S5.2)")
+        problems.append("no music candidate chosen yet (step S5.2); the placeholder bed will be used")
     return problems

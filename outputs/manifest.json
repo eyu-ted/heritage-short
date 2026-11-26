@@ -1,5 +1,91 @@
 {
   "stages": {
+    "assemble": {
+      "film_16x9": {
+        "hash": "cc5808f010a7",
+        "meta": {
+          "audio_ms": 9014,
+          "duration_s": 83.127,
+          "fps": 24.0,
+          "lra": 4.4,
+          "lufs": -14.08,
+          "mastering": {
+            "attempts": 3,
+            "gain_db": 10.08,
+            "limit_dbfs": -2.0,
+            "master_lufs": -14.08,
+            "master_tp": -1.88,
+            "premix_lufs": -23.25,
+            "premix_tp": -1.43
+          },
+          "music": "score-seed22",
+          "problems": [],
+          "render_ms": 338921,
+          "shots": {
+            "s01": "kenburns",
+            "s02": "kenburns",
+            "s03": "kenburns",
+            "s04": "kenburns",
+            "s05": "kenburns",
+            "s06": "kenburns",
+            "s07": "kenburns",
+            "s08": "kenburns",
+            "s09": "kenburns",
+            "s10": "kenburns"
+          },
+          "size": [
+            1920,
+            1080
+          ],
+          "true_peak_dbtp": -1.88
+        },
+        "path": "outputs/assemble/film_16x9__cc5808f010a7.mp4",
+        "produced_at": "2026-11-26T12:43:06+00:00",
+        "status": "ok"
+      },
+      "film_9x16": {
+        "hash": "abf8dc622407",
+        "meta": {
+          "audio_ms": 9014,
+          "duration_s": 83.127,
+          "fps": 24.0,
+          "lra": 4.4,
+          "lufs": -14.08,
+          "mastering": {
+            "attempts": 3,
+            "gain_db": 10.08,
+            "limit_dbfs": -2.0,
+            "master_lufs": -14.08,
+            "master_tp": -1.88,
+            "premix_lufs": -23.25,
+            "premix_tp": -1.43
+          },
+          "music": "score-seed22",
+          "problems": [],
+          "render_ms": 421524,
+          "shots": {
+            "s01": "kenburns",
+            "s02": "kenburns",
+            "s03": "kenburns",
+            "s04": "kenburns",
+            "s05": "kenburns",
+            "s06": "kenburns",
+            "s07": "kenburns",
+            "s08": "kenburns",
+            "s09": "kenburns",
+            "s10": "kenburns"
+          },
+          "size": [
+            1080,
+            1920
+          ],
+          "true_peak_dbtp": -1.88
+        },
+        "path": "outputs/assemble/film_9x16__abf8dc622407.mp4",
+        "produced_at": "2026-11-26T12:37:25+00:00",
+        "status": "ok"
+      }
+    },
     "keyframes": {
       "s01": {
         "hash": "1df2d392213c",
@@ -134,11 +220,96 @@
         "status": "ok"
       }
     },
+    "music": {
+      "score-seed11": {
+        "hash": "1d62c1757cf4",
+        "meta": {
+          "duration_s": 90.0,
+          "finished_at": "2026-11-26T05:24:48+00:00",
+          "gpu": "Tesla T4",
+          "gpu_seconds": 11.3,
+          "settings": {
+            "bpm": 72,
+            "duration_s": 90,
+            "keyscale": null,
+            "shift": 3.0,
+            "steps": 8,
+            "thinking": false,
+            "variant": "acestep-v15-turbo"
+          },
+          "versions": {
+            "ace_step_commit": "dce621408bee8c31b4fcf4811682eb9359e1bc94",
+            "ace_step_tag": "v0.1.8",
+            "python": "3.13.16",
+            "torch": "2.10.0+cu128"
+          }
+        },
+        "path": "outputs/music/score-seed11__1d62c1757cf4.wav",
+        "produced_at": "2026-11-26T06:33:29+00:00",
+        "status": "ok"
+      },
+      "score-seed22": {
+        "hash": "5d2a694b6e08",
+        "meta": {
+          "duration_s": 90.0,
+          "finished_at": "2026-11-26T05:24:57+00:00",
+          "gpu": "Tesla T4",
+          "gpu_seconds": 8.7,
+          "settings": {
+            "bpm": 72,
+            "duration_s": 90,
+            "keyscale": null,
+            "shift": 3.0,
+            "steps": 8,
+            "thinking": false,
+            "variant": "acestep-v15-turbo"
+          },
+          "versions": {
+            "ace_step_commit": "dce621408bee8c31b4fcf4811682eb9359e1bc94",
+            "ace_step_tag": "v0.1.8",
+            "python": "3.13.16",
+            "torch": "2.10.0+cu128"
+          }
+        },
+        "path": "outputs/music/score-seed22__5d2a694b6e08.wav",
+        "produced_at": "2026-11-26T06:33:29+00:00",
+        "status": "ok"
+      },
+      "score-seed33": {
+        "hash": "af8f6d913248",
+        "meta": {
+          "duration_s": 90.0,
+          "finished_at": "2026-11-26T05:25:06+00:00",
+          "gpu": "Tesla T4",
+          "gpu_seconds": 8.8,
+          "settings": {
+            "bpm": 72,
+            "duration_s": 90,
+            "keyscale": null,
+            "shift": 3.0,
+            "steps": 8,
+            "thinking": false,
+            "variant": "acestep-v15-turbo"
+          },
+          "versions": {
+            "ace_step_commit": "dce621408bee8c31b4fcf4811682eb9359e1bc94",
+            "ace_step_tag": "v0.1.8",
+            "python": "3.13.16",
+            "torch": "2.10.0+cu128"
+          }
+        },
+        "path": "outputs/music/score-seed33__af8f6d913248.wav",
+        "produced_at": "2026-11-26T06:33:29+00:00",
+        "status": "ok"
+      }
+    },
     "narration": {
       "s01": {
         "hash": "462029f444fb",
         "meta": {
-          "duration_s": 8.331,
+          "c2pa": "outputs/narration/s01__462029f444fb.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 8.171,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -150,7 +321,9 @@
       "s02": {
         "hash": "c2b12f174c70",
         "meta": {
-          "duration_s": 8.151,
+          "c2pa": "outputs/narration/s02__c2b12f174c70.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 7.991,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -162,7 +335,9 @@
       "s03": {
         "hash": "bf0a486842fc",
         "meta": {
-          "duration_s": 7.611,
+          "c2pa": "outputs/narration/s03__bf0a486842fc.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 7.451,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -174,7 +349,9 @@
       "s04": {
         "hash": "44ec275b3d59",
         "meta": {
-          "duration_s": 7.521,
+          "c2pa": "outputs/narration/s04__44ec275b3d59.c2pa",
+          "c2pa_bytes": 7655,
+          "duration_s": 7.361,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -186,7 +363,9 @@
       "s05": {
         "hash": "113a0c126f04",
         "meta": {
-          "duration_s": 5.191,
+          "c2pa": "outputs/narration/s05__113a0c126f04.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 5.031,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -198,7 +377,9 @@
       "s06": {
         "hash": "99cda7906f1c",
         "meta": {
-          "duration_s": 7.121,
+          "c2pa": "outputs/narration/s06__99cda7906f1c.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 6.961,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -210,7 +391,9 @@
       "s07": {
         "hash": "bd920e3a6c76",
         "meta": {
-          "duration_s": 5.601,
+          "c2pa": "outputs/narration/s07__bd920e3a6c76.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 5.441,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -222,7 +405,9 @@
       "s08": {
         "hash": "bec4a2a970b6",
         "meta": {
-          "duration_s": 7.321,
+          "c2pa": "outputs/narration/s08__bec4a2a970b6.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 7.161,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -234,7 +419,9 @@
       "s09": {
         "hash": "a41632d424c8",
         "meta": {
-          "duration_s": 4.121,
+          "c2pa": "outputs/narration/s09__a41632d424c8.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 3.961,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -246,7 +433,9 @@
       "s10": {
         "hash": "8f806fbf6772",
         "meta": {
-          "duration_s": 5.181,
+          "c2pa": "outputs/narration/s10__8f806fbf6772.c2pa",
+          "c2pa_bytes": 7656,
+          "duration_s": 5.021,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
@@ -368,95 +557,95 @@
     },
     "shots": {
       "s01": {
-        "hash": "0414e0dba51a",
+        "hash": "96b7ea95db66",
         "meta": {
-          "duration_s": 9.331,
+          "duration_s": 9.171,
           "render": "kenburns",
-          "render_ms": 10981
+          "render_ms": 9572
         },
-        "path": "outputs/shots/s01__0414e0dba51a.mp4",
-        "produced_at": "2026-11-25T11:56:08+00:00",
+        "path": "outputs/shots/s01__96b7ea95db66.mp4",
+        "produced_at": "2026-11-25T18:05:53+00:00",
         "status": "ok"
       },
       "s02": {
-        "hash": "1cbad9514b4e",
+        "hash": "baf81eacecc1",
         "meta": {
-          "duration_s": 9.151,
+          "duration_s": 8.991,
           "render": "kenburns",
-          "render_ms": 10672
+          "render_ms": 8981
         },
-        "path": "outputs/shots/s02__1cbad9514b4e.mp4",
-        "produced_at": "2026-11-25T11:56:18+00:00",
+        "path": "outputs/shots/s02__baf81eacecc1.mp4",
+        "produced_at": "2026-11-25T18:06:02+00:00",
         "status": "ok"
       },
       "s03": {
-        "hash": "87f74e3da996",
+        "hash": "34e1906cffaf",
         "meta": {
-          "duration_s": 8.611,
-          "fallback_hash": "3ca126ca95d2",
+          "duration_s": 8.451,
+          "fallback_hash": "2322184f5bfa",
           "reason": "wan clip not ingested yet",
           "render": "kenburns",
-          "render_ms": 9732
+          "render_ms": 8484
         },
-        "path": "outputs/shots/s03__87f74e3da996.mp4",
-        "produced_at": "2026-11-25T11:56:28+00:00",
+        "path": "outputs/shots/s03__34e1906cffaf-kenburns.mp4",
+        "produced_at": "2026-11-25T18:06:10+00:00",
         "status": "fallback"
       },
       "s04": {
-        "hash": "ccf77aa8f2f3",
+        "hash": "f5cdeb6a556e",
         "meta": {
-          "duration_s": 8.521,
+          "duration_s": 8.361,
           "render": "kenburns",
-          "render_ms": 9931
+          "render_ms": 8613
         },
-        "path": "outputs/shots/s04__ccf77aa8f2f3.mp4",
-        "produced_at": "2026-11-25T11:56:38+00:00",
+        "path": "outputs/shots/s04__f5cdeb6a556e.mp4",
+        "produced_at": "2026-11-25T18:06:19+00:00",
         "status": "ok"
       },
       "s05": {
-        "hash": "026be30fa5ec",
+        "hash": "b084842bfb27",
         "meta": {
-          "duration_s": 6.191,
+          "duration_s": 6.031,
           "render": "kenburns",
-          "render_ms": 6545
+          "render_ms": 5959
         },
-        "path": "outputs/shots/s05__026be30fa5ec.mp4",
-        "produced_at": "2026-11-25T11:56:45+00:00",
+        "path": "outputs/shots/s05__b084842bfb27.mp4",
+        "produced_at": "2026-11-25T18:06:25+00:00",
         "status": "ok"
       },
       "s06": {
-        "hash": "ce4507e939fd",
+        "hash": "9022c2d7ca1f",
         "meta": {
-          "duration_s": 8.121,
+          "duration_s": 7.961,
           "render": "kenburns",
-          "render_ms": 9176
+          "render_ms": 8344
         },
-        "path": "outputs/shots/s06__ce4507e939fd.mp4",
-        "produced_at": "2026-11-25T11:56:54+00:00",
+        "path": "outputs/shots/s06__9022c2d7ca1f.mp4",
+        "produced_at": "2026-11-25T18:06:33+00:00",
         "status": "ok"
       },
       "s07": {
-        "hash": "7f007916a56b",
+        "hash": "e067a4f0da89",
         "meta": {
           "duration_s": 8.0,
           "fallback_hash": "5d7daaec9229",
           "reason": "wan clip not ingested yet",
           "render": "kenburns",
-          "render_ms": 9189
+          "render_ms": 5471
         },
-        "path": "outputs/shots/s07__7f007916a56b.mp4",
-        "produced_at": "2026-11-25T11:57:03+00:00",
+        "path": "outputs/shots/s07__e067a4f0da89-kenburns.mp4",
+        "produced_at": "2026-11-25T17:58:57+00:00",
         "status": "fallback"
       },
       "s08": {
-        "hash": "cf3e3eede170",
+        "hash": "6c753d74e863",
         "meta": {
-          "duration_s": 8.321,
+          "duration_s": 8.161,
           "render": "kenburns",
-          "render_ms": 9720
+          "render_ms": 8658
         },
-        "path": "outputs/shots/s08__cf3e3eede170.mp4",
-        "produced_at": "2026-11-25T11:57:13+00:00",
+        "path": "outputs/shots/s08__6c753d74e863.mp4",
+        "produced_at": "2026-11-25T18:06:42+00:00",
         "status": "ok"
       },
       "s09": {
@@ -471,16 +660,16 @@
         "status": "ok"
       },
       "s10": {
-        "hash": "f04d138bd2fa",
+        "hash": "0de4b29b37cc",
         "meta": {
           "duration_s": 8.0,
           "fallback_hash": "ba99aecfe8c4",
           "reason": "wan clip not ingested yet",
           "render": "kenburns",
-          "render_ms": 9298
+          "render_ms": 5689
         },
-        "path": "outputs/shots/s10__f04d138bd2fa.mp4",
-        "produced_at": "2026-11-25T11:57:30+00:00",
+        "path": "outputs/shots/s10__0de4b29b37cc-kenburns.mp4",
+        "produced_at": "2026-11-25T17:59:02+00:00",
         "status": "fallback"
       }
     }

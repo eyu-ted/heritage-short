@@ -3,7 +3,7 @@
 
 PY ?= python
 
-.PHONY: film validate test smoke clean-cache
+.PHONY: film validate test smoke costs
 
 film:
 	$(PY) -m pipeline all
@@ -17,5 +17,5 @@ smoke:
 test:
 	$(PY) -m pytest -q
 
-clean-cache:
-	$(PY) -m pipeline clean-cache
+costs:
+	$(PY) -m pipeline costs

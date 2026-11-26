@@ -27,7 +27,7 @@ def test_narration_always_fits_inside_its_shot(storyboard):
 
 
 def test_chunks_respect_two_lines_of_forty():
-    text = "Every morning, before the city woke, my grandmother my grandmother spread fresh grass on the floor."
+    text = "Every morning, before the city woke, my grandmother always spread fresh grass on the floor."
     pieces = subtitles.chunk(text)
     assert len(pieces) == 2
     assert " ".join(pieces) == text

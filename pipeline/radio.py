@@ -40,16 +40,18 @@ MUSIC_BED_LUFS = -26  # the score sits well under the voice before ducking
 
 
 def audio_graph(slots: list[timeline.Slot], total: float, first: int, duck: dict, loudness: dict,
-                music: bool = False) -> list[str]:
+                music: bool = False, master: bool = True, voice: str = "") -> list[str]:
     """Narration inputs are [first .. first+n-1]; input first+n is the music: the placeholder
-    pad, or (music=True) a real score candidate, levelled, trimmed to the film and faded out."""
+    pad, or (music=True) a real score candidate, levelled, trimmed to the film and faded out.
+    master=False leaves out the final one-pass loudnorm (the final edit measures and masters
+    the mix itself, see assemble.py); `voice` is an optional filter chain for the narration bus."""
     n = len(slots)
     parts = []
     for i, slot in enumerate(slots):
         parts.append(f"[{first + i}:a]aresample=48000,adelay={int(round(slot.narration_start * 1000))}:all=1[n{i}]")
     parts.append("".join(f"[n{i}]" for i in range(n)) +
                  f"amix=inputs={n}:normalize=0:duration=longest,apad=whole_dur={total}[narr]")
-    parts.append("[narr]asplit=2[narr_main][narr_sc]")
+    parts.append(f"[narr]{voice + ',' if voice else ''}asplit=2[narr_main][narr_sc]")
     fade = f"afade=t=out:st={max(0.0, total - 3)}:d=3"
     if music:
         parts.append(f"[{first + n}:a]aresample=48000,atrim=0:{total},asetpts=PTS-STARTPTS,"
@@ -60,8 +62,8 @@ def audio_graph(slots: list[timeline.Slot], total: float, first: int, duck: dict
                      f"afade=t=in:d=2,{fade},volume=-10dB[pad]")
     parts.append(f"[pad][narr_sc]sidechaincompress=threshold={duck['threshold']}:ratio={duck['ratio']}:"
                  f"attack={duck['attack_ms']}:release={duck['release_ms']}[ducked]")
-    parts.append(f"[narr_main][ducked]amix=inputs=2:normalize=0:duration=first,"
-                 f"loudnorm=I={loudness['I']}:TP={loudness['TP']}:LRA=11,aresample=48000[aout]")
+    final = f"loudnorm=I={loudness['I']}:TP={loudness['TP']}:LRA=11," if master else ""
+    parts.append(f"[narr_main][ducked]amix=inputs=2:normalize=0:duration=first,{final}aresample=48000[aout]")
     return parts
 
 

@@ -41,9 +41,9 @@ def test_unknown_shot_rejected(repo, capsys):
     assert main(["keyframes", "--dry-run", "--shot", "s99"], root=repo.root) == 1
 
 
-def test_unbuilt_stage_exits_not_ready(repo, capsys):
-    assert main(["assemble"], root=repo.root) == 2  # assembly arrives in Phase 7
-    assert "not available yet" in capsys.readouterr().err
+def test_assemble_waits_for_its_inputs(repo, capsys):
+    assert main(["assemble"], root=repo.root) == 2  # no narration or shots yet
+    assert "blocked" in capsys.readouterr().err
 
 
 def test_music_not_made_yet_points_to_kaggle(repo, capsys):

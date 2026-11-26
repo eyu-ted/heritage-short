@@ -182,7 +182,7 @@
       "reason": "Rhythm of grinding links the picture to the score.",
       "narration": {
         "am": "የቡና መውቀጥ ድምፅ የቀኔ የመጀመሪያው ሙዚቃ ነበር።",
-        "en": "The sound of grinding was the first music of my day."
+        "en": "The sound of pounding was the first music of my day."
       },
       "keyframe": {
         "prompt": "Close-up of a traditional wooden mortar filled with dark roasted coffee beans, a metal pestle resting inside it, warm side light, no hands, no people anywhere in the frame",
@@ -372,7 +372,7 @@
         ]
       }
     ],
-    "chosen": null
+    "chosen": "score-seed22"
   },
   "mix": {
     "duck": {

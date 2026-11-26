@@ -1,0 +1,25 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Arial,43,&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,0,0,0,0,100,100,0,0,1,3,0,2,64,64,50,1
+Style: Card,Arial,61,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,1,0,0,5,77,77,0,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.40,0:00:03.94,Default,,0,0,0,,Every morning, before the city woke,
+Dialogue: 0,0:00:03.94,0:00:08.57,Default,,0,0,0,,my grandmother spread\Nfresh grass on the floor.
+Dialogue: 0,0:00:09.57,0:00:17.56,Default,,0,0,0,,She washed the green beans slowly.\NShe never rushed coffee.
+Dialogue: 0,0:00:18.56,0:00:26.01,Default,,0,0,0,,Then came the fire, and the smell\Nthat called the neighbours in.
+Dialogue: 0,0:00:27.01,0:00:34.37,Default,,0,0,0,,Incense filled the room.\NIt was her way of saying: welcome.
+Dialogue: 0,0:00:35.37,0:00:40.40,Default,,0,0,0,,The sound of grinding was\Nthe first music of my day.
+Dialogue: 0,0:00:41.40,0:00:48.37,Default,,0,0,0,,Then we waited. She taught me\Nthat waiting is part of the gift.
+Dialogue: 0,0:00:49.37,0:00:54.81,Default,,0,0,0,,One pot. Many cups.\NNo one was ever left out.
+Dialogue: 0,0:00:57.37,0:01:04.53,Default,,0,0,0,,Three rounds: abol, tona,\Nand baraka, the blessing.
+Dialogue: 0,0:01:05.53,0:01:09.49,Default,,0,0,0,,By the third cup,\Nstrangers had become family.
+Dialogue: 0,0:01:12.53,0:01:17.55,Default,,0,0,0,,'Stay a little longer,' she always\Nsaid. 'The coffee is still warm.'

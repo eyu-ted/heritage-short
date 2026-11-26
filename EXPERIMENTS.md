@@ -68,3 +68,35 @@ Format: **hypothesis → change → result → decision**. One change at a time;
 - **Measured** on `outputs/final/radio_cut.mp4` (EBU R128): **-15.6 LUFS** integrated, true peak **-0.8 dBFS**, against a target of -14 LUFS / -1 dBTP.
 - **Cause:** FFmpeg's `loudnorm` in a single pass estimates as it goes; the brief recommends two passes for accuracy.
 - **Decision:** acceptable for the radio cut (a prototype for listening tests). The final assembly (Phase 7) uses two-pass `loudnorm` and is measured again.
+- **Phase 7 follow-up: two-pass did not fix it either. Every attempt was measured on the delivered MP4 (`stage: assemble` lines in `runs.jsonl`, 25 Nov 18:00-18:11 UTC):**
+
+  | # | Mastering | LUFS | True peak | Verdict |
+  |---|---|---|---|---|
+  | 1 | two-pass `loudnorm` (`linear=true`) | -14.96 | -1.29 | loudness off by 1 LU |
+  | 2 | C2PA noise removed (F11); voice compressor 2.5:1; gain + `alimiter` at 48 kHz | -14.14 | **-0.87** | the check flagged the peak |
+  | 3 | same, limiter **4x oversampled** (192 kHz) | **-14.13** | **-1.87** | both on target |
+
+  - **Why 1 missed:** `linear=true` only applies when the gain fits under the true-peak limit. The voice had ~20 dB between peak and loudness (partly the F11 noise), and -14 LUFS with peaks under -1.5 allows ~12.5 dB. So loudnorm silently switched to dynamic mode and landed 1 LU short.
+  - **Why 2 missed:** `alimiter` limits samples. After +10 dB of gain, the peaks *between* samples rose 1.2 dB above its limit. Running it at 4x the sample rate lets it see them. This is the usual way a true-peak limiter is built.
+  - **What made the difference:** an automatic check that measures the delivered file against the brief's numbers. It caught both misses, and nobody had to listen for them.
+  - **Final chain:**
+    1. Narration bus: `acompressor` 2.5:1 above -18 dBFS.
+    2. Duck the music under it.
+    3. Measure, then apply one gain to -14 LUFS.
+    4. 4x-oversampled limiter at -2.0 dBFS.
+    5. Measure again; if it missed by more than 0.2 LU, correct the gain and repeat (3 passes here).
+    6. AAC, then measure the MP4.
+
+## E8 (observation). Choosing the score: three seeds, same prompt, measured before listening
+- **Setup:** ACE-Step 1.5 made one prompt (`storyboard.json` → `music.cues[0]`, 72 bpm, instrumental, 90 s) with seeds 11, 22 and 33, on a free Colab T4. Per the sidecars, the GPU time was 11.3 s, 8.7 s and 8.8 s. All three came in at -14.8 to -15.6 LUFS with peaks under -0.5 dBTP.
+- **Measured** (FFmpeg `astats`, scratch script; the film is 83.1 s):
+
+  | Seed | Level swing over 3 s windows | 1-4 kHz (speech band) vs full band | Where it ends |
+  |---|---|---|---|
+  | 11 | 52.3 dB | -22.7 dB | goes silent at ~79 s |
+  | 22 | **9.4 dB** | -18.0 dB | plays to ~86 s, then fades |
+  | 33 | 54.0 dB | -21.0 dB | goes silent at ~78 s |
+
+- **Decision (provisional, by measurement; the owner can overrule it by ear):** `score-seed22`. Seeds 11 and 33 end before the film does, so the end card would sit in silence. Seed 22 is also the steadiest bed. It puts the most energy in the speech band, but the bed sits at -26 LUFS before mixing and is ducked under every line.
+- **Result:** both films were rebuilt with it: -14.1 LUFS, -1.9 dBTP. The speech passages measure -13.7 dB RMS and the music-only gap after s09 -16.2 dB, so the music still rises between lines as designed.
+- **Lesson:** the same prompt with different seeds gave different *structures* (where the piece ends), not just different textures. Measuring the ending took one script and would have been easy to miss by ear on a 90-second loop.

@@ -37,6 +37,7 @@ from .storyboard import shot_duration, shots_in_order
 NAME = "shots"
 EXT = "mp4"
 PHASE = 4
+LOCAL = True  # never calls a provider (Wan clips arrive by `ingest`), so it runs under --offline
 MASTER = 1440  # square master; 9:16 crop = 810x1440, 16:9 crop = 1440x810
 
 # ---- Wan generation settings (part of the clip hash) ----------------------------------

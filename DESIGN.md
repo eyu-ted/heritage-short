@@ -27,7 +27,7 @@ The ceremony's three rounds give the film its acts, its music cues and its endin
 | s02  | prologue | Green beans washed in a clay bowl          | First object; patient, tactile rhythm                |
 | s03  | abol     | Beans roasting over charcoal, smoke rising | Sensory hook: fire and the smell that gathers people |
 | s04  | abol     | Incense smoke, backlit                     | Mood and welcome without hands or faces              |
-| s05  | abol     | Mortar and pestle, grinding                | Rhythm that links picture to score                   |
+| s05  | abol     | Mortar and pestle, pounding                | Rhythm that links picture to score                   |
 | s06  | tona     | Jebena on the coals, steam                 | A breath in the pacing: waiting is part of the gift  |
 | s07  | tona     | The pour from the jebena into many cups    | Hero shot and recurring motif: one pot, many cups    |
 | s08  | baraka   | Elder from behind, offering a cup          | The human presence, without any real likeness        |
@@ -55,9 +55,9 @@ Timing from the real narration (66.2 s of speech in 84.2 s): s01 9.3 s, s02 9.2,
 
 | #  | Who (participant, relation, location) | What they said | What I will change |
 | :- | :------------------------------------ | :-------------- | :----------------- |
-| 1  | **Daniel (friend), Ethiopia** | **Awaiting feedback.** Share the radio cut and record Daniel's own words after he watches/listens. | To be decided after his feedback. |
-| 2  | **Estifanos (friend), Ethiopia** | **Awaiting feedback.** Share the radio cut and record Estifanos's own words after he watches/listens. | To be decided after his feedback. |
-| 3  | **Kidus (cousin), Ethiopia** | **Awaiting feedback.** Share the radio cut and record Kidus's own words after he watches/listens. | To be decided after his feedback. |
+| 1  | **D. (friend), Ethiopia** | **Awaiting feedback.** Share the radio cut and record D.'s own words after they listen. | To be decided after the feedback. |
+| 2  | **E. (friend), Ethiopia** | **Awaiting feedback.** Share the radio cut and record E.'s own words after they listen. | To be decided after the feedback. |
+| 3  | **K. (family), Ethiopia** | **Awaiting feedback.** Share the radio cut and record K.'s own words after they listen. | To be decided after the feedback. |
 
 **Testing status:** These three people are the intended audience-test participants. Their feedback has not yet been collected, so this table must be completed using their actual responses before it is described as a completed user test.
 
@@ -81,7 +81,7 @@ For a useful comparison, ask each participant the same two additional questions:
 
 ### 4a. Preparation notes (AI-assisted review, NOT user testing)
 
-An AI assistant previously reviewed the radio cut's script, subtitle file (`outputs/final/radio_cut.srt`) and timings while role-playing three audience personas. **It did not hear the audio**, so it could not judge the TTS voice, pronunciation or how the drone sounds. Those simulated reactions are not feedback from Daniel, Estifanos or Kidus and are not counted as audience evidence.
+An AI assistant previously reviewed the radio cut's script, subtitle file (`outputs/final/radio_cut.srt`) and timings while role-playing three audience personas. **It did not hear the audio**, so it could not judge the TTS voice, pronunciation or how the drone sounds. Those simulated reactions are not feedback from D., E. or K. and are not counted as audience evidence.
 
 Measured from the SRT (facts, not opinions):
 
@@ -99,3 +99,22 @@ What the AI-assisted review suggests testing with the three participants. These 
 ## 5. User test 2: the near-final cut
 
 *Pending (Phase 8).*
+
+### 5a. Review of the test-2 kit (26 Nov): AI-assisted, NOT user testing
+
+The **written test kit** (questions, consent line, checklist) and the script text were reviewed before the test **with AI assistance**, written from the points of view of D., E. and K. (the same three people as §4). As in §4a, these are **not their own words and not audience evidence.** Nobody watched or heard the film for this review. It is recorded because it changed the test plan and one subtitle. Each change below was checked against the repo before it was applied; for example, the s05 fix was checked against the keyframe prompt.
+
+| Finding | Persona | Change |
+|---|---|---|
+| Nothing asks about the pictures, though Ethiopian viewers are the ones most likely to spot a wrong jebena, odd cups or melted hands | D. | New neutral Q3: "Did anything you saw look wrong, strange, or out of place?" |
+| The consent line says "I used AI tools", so the end-card question can't show whether the card is *noticed* | D. | The disclosure stays (ethically right). The kit now says that the question tests whether the card is readable and understood, not whether it is discovered. |
+| Family viewers will be kind on "would you watch it?" | D. | Asks about behaviour too: "Where would you have scrolled away?" Family is marked as family, so the bias shows in the summary. |
+| Feeds autoplay muted, and every test was sound-on | D. | Optional muted check: one viewer sees the first 5 s muted and says what they think it's about. |
+| A phone speaker hides clicks | D. | At least one listen must be on headphones; the click check (F11) counts only from that. |
+| Four films in `outputs/assemble/`, and the wrong one is easy to grab | E. | The kit names both full filenames; the two superseded films were deleted. |
+| The gallery app's controls can cover the bottom subtitle line | E. | The kit says to tap once so the controls hide. |
+| Initials + relation + city can identify someone in a public repo | E. | Public records use only initials, friend/family, and Ethiopia/diaspora. §4 had full first names, which are now initials. |
+| The author approved the narration, so the author hears what they expect | K. | The separate native listener is required, not optional. |
+| Regenerating one line on `gemini-3.8-flash-tts` while nine stay on lite would sound like a different speaker | K. | Verdict options: keep lite / regenerate the line on lite / regenerate all 10 on flash-tts (the whole daily quota). |
+| s05: መውቀጥ is *pounding* (mortar), but the subtitle said *grinding* | K. | Checked against the picture: the s05 keyframe prompt is a wooden mortar with a pestle. The subtitle is now "pounding". It was a subtitle-only change, so the 2 films were re-rendered with no API calls. |
+| s09 እንግዶች = *guests*, not *strangers*; s08 *baraka* vs *bereka*; s01 ቄጠማ vs ቄጤማ | K. | Left as they are, and added to the kit as questions for the native listener. These are wording and spelling choices, not errors. |

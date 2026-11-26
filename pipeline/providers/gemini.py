@@ -1,6 +1,8 @@
 """Thin wrapper over the Gemini API (google-genai SDK): text and text-to-speech.
 
-TTS returns raw 16-bit PCM; we wrap it in a WAV header ourselves.
+TTS returns raw 16-bit PCM; we wrap it in a WAV header ourselves. The PCM is followed by a
+signed C2PA content credential (Google's AI-provenance record), which is split off and
+kept separately; see `split_c2pa` and FAILURES F11.
 """
 from __future__ import annotations
 
@@ -27,10 +29,32 @@ class AudioResult:
     mime_type: str
     input_tokens: int | None
     output_tokens: int | None
+    provenance: bytes | None = None  # the C2PA manifest (JUMBF) that came with the audio
 
     @property
     def duration_s(self) -> float:
         return len(self.pcm) / (2 * self.sample_rate)  # 16-bit mono
+
+
+C2PA_CHUNK = b"C2PA"
+
+
+def split_c2pa(data: bytes) -> tuple[bytes, bytes | None]:
+    """Separate the speech from the content credential that follows it.
+
+    Gemini TTS appends a signed C2PA manifest after the PCM as a RIFF-style chunk:
+    b"C2PA" + uint32 little-endian size + a JUMBF box (b"jumb"). Written into a WAV as if it
+    were samples, those ~7.7 KB play as 0.16 s of full-scale noise at the end of every line
+    (+4 dBTP peaks; FAILURES F11). Only an exact match of that structure, ending exactly at
+    the end of the data, is split off. Returns (pcm, manifest or None)."""
+    idx = data.rfind(C2PA_CHUNK)
+    while idx >= 0:
+        size = int.from_bytes(data[idx + 4:idx + 8], "little")
+        end = idx + 8 + size
+        if len(data) in (end, end + 1) and data[idx + 12:idx + 16] == b"jumb" and idx % 2 == 0:
+            return data[:idx], data[idx + 8:end]
+        idx = data.rfind(C2PA_CHUNK, 0, idx)
+    return data, None
 
 
 def rate_from_mime(mime: str | None, default: int = DEFAULT_TTS_RATE) -> int:
@@ -117,4 +141,5 @@ class Gemini:
         if not inline or not inline.data:
             raise RuntimeError("Gemini TTS returned empty audio")
         mime = inline.mime_type or ""
-        return AudioResult(inline.data, rate_from_mime(mime), mime, *_usage(resp))
+        pcm, provenance = split_c2pa(inline.data)
+        return AudioResult(pcm, rate_from_mime(mime), mime, *_usage(resp), provenance=provenance)

@@ -1,53 +1,53 @@
 1
-00:00:00,400 --> 00:00:04,013
+00:00:00,400 --> 00:00:03,944
 Every morning, before the city woke,
 
 2
-00:00:04,013 --> 00:00:08,731
+00:00:03,944 --> 00:00:08,571
 my grandmother spread
 fresh grass on the floor.
 
 3
-00:00:09,731 --> 00:00:17,882
-She washed the green beans
-slowly. She never rushed coffee.
+00:00:09,571 --> 00:00:17,562
+She washed the green beans slowly.
+She never rushed coffee.
 
 4
-00:00:18,882 --> 00:00:26,493
+00:00:18,562 --> 00:00:26,013
 Then came the fire, and the smell
 that called the neighbours in.
 
 5
-00:00:27,493 --> 00:00:35,014
-Incense filled the room. It was
-her way of saying: welcome.
+00:00:27,013 --> 00:00:34,374
+Incense filled the room.
+It was her way of saying: welcome.
 
 6
-00:00:36,014 --> 00:00:41,205
+00:00:35,374 --> 00:00:40,405
 The sound of grinding was
 the first music of my day.
 
 7
-00:00:42,205 --> 00:00:49,326
+00:00:41,405 --> 00:00:48,366
 Then we waited. She taught me
 that waiting is part of the gift.
 
 8
-00:00:50,326 --> 00:00:55,927
-One pot. Many cups. No
-one was ever left out.
+00:00:49,366 --> 00:00:54,807
+One pot. Many cups.
+No one was ever left out.
 
 9
-00:00:58,326 --> 00:01:05,647
+00:00:57,366 --> 00:01:04,527
 Three rounds: abol, tona,
 and baraka, the blessing.
 
 10
-00:01:06,647 --> 00:01:10,768
-By the third cup, strangers
-had become family.
+00:01:05,527 --> 00:01:09,488
+By the third cup,
+strangers had become family.
 
 11
-00:01:13,647 --> 00:01:18,828
+00:01:12,527 --> 00:01:17,548
 'Stay a little longer,' she always
 said. 'The coffee is still warm.'

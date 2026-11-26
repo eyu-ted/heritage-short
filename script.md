@@ -8,7 +8,7 @@ How to review:
 3. The English line is the subtitle. If you change the meaning of an Amharic line, change the English to match.
 4. When you are happy, tell me "script approved" (or paste your corrected lines). I copy them into `storyboard.json`; only then is TTS called (10 calls; the free quota is tight, see FAILURES F7).
 
-The narrator is my grandmother's grandchild, remembering. Past habitual tense ("every morning she would...").
+The narrator is her grandchild, remembering. Past habitual tense ("every morning she would...").
 
 ---
 
@@ -18,7 +18,7 @@ The narrator is my grandmother's grandchild, remembering. Past habitual tense ("
 | s02 | prologue | She washed the green beans slowly. She never rushed coffee. | አረንጓዴውን ቡና ቀስ ብላ ታጥብ ነበር። ቡናን ፈጽሞ አታቻኩልም ነበር። |
 | s03 | abol | Then came the fire, and the smell that called the neighbours in. | ከዚያም እሳቱ ይነድ ነበር፤ ጎረቤቶችን የሚጠራው መዓዛም ይሸት ነበር። |
 | s04 | abol | Incense filled the room. It was her way of saying: welcome. | የዕጣኑ ጭስ ቤቱን ይሞላ ነበር። "እንኳን ደህና መጣችሁ" የምትልበት መንገዷ ነበር። |
-| s05 | abol | The sound of grinding was the first music of my day. | የቡና መውቀጥ ድምፅ የቀኔ የመጀመሪያው ሙዚቃ ነበር። |
+| s05 | abol | The sound of pounding was the first music of my day. *(26 Nov: was "grinding"; መውቀጥ is pounding with a mortar, which the picture shows. Raised in an AI-assisted review, DESIGN §5a.)* | የቡና መውቀጥ ድምፅ የቀኔ የመጀመሪያው ሙዚቃ ነበር። |
 | s06 | tona | Then we waited. She taught me that waiting is part of the gift. | ከዚያም እንጠብቅ ነበር። መጠበቅም የስጦታው አካል እንደሆነ አስተማረችኝ። |
 | s07 | tona | One pot. Many cups. No one was ever left out. | አንድ ጀበና። ብዙ ሲኒዎች። ማንም ቀርቶ አያውቅም። |
 | s08 | baraka | Three rounds: abol, tona, and baraka, the blessing. | ሦስት ዙሮች፤ አቦል፣ ቶና፣ እና በረካ፤ የበረከቱ ዙር። |

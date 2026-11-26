@@ -69,7 +69,7 @@ def chunk(text: str) -> list[str]:
     length and preferring breaks after punctuation.
 
     (A purely greedy split left orphans like "...grass on" / "the floor.", found when the
-    my grandmother lines were added.)
+    real script lines were added.)
     """
     words = text.split()
     greedy = _greedy(words)
@@ -150,11 +150,27 @@ def style_for(width: int, height: int) -> dict[str, int]:
     return {"font": font, "margin_v": margin, "outline": max(2, font // 14)}
 
 
-def to_ass(cues: list[Cue], width: int, height: int) -> str:
+def _plain(text: str) -> str:
+    return text.replace("{", "(").replace("}", ")")  # braces would start an ASS override tag
+
+
+@dataclass(frozen=True)
+class Card:
+    """The end card: a main line and a smaller line, centred on black, fading in."""
+    start: float
+    end: float
+    text: str
+    subtitle: str = ""
+
+
+def to_ass(cues: list[Cue], width: int, height: int, card: Card | None = None) -> str:
     """Subtitles for burning in. Unlike SRT (scaled from a fixed 288-px canvas, which made the
     vertical text huge and re-wrapped it into 3-4 lines), ASS is laid out in real pixels, and
-    WrapStyle 2 keeps exactly the two-line breaks chosen above."""
+    WrapStyle 2 keeps exactly the two-line breaks chosen above. The end card (if any) is drawn
+    by the same renderer, so no font file path has to be passed to FFmpeg."""
     st = style_for(width, height)
+    card_font = round(min(width, height) * 0.085)
+    card_sub = round(card_font * 0.5)
     head = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
         "WrapStyle: 2", "ScaledBorderAndShadow: yes", "",
@@ -164,11 +180,19 @@ def to_ass(cues: list[Cue], width: int, height: int) -> str:
         "Alignment, MarginL, MarginR, MarginV, Encoding",
         f"Style: Default,Arial,{st['font']},&H00FFFFFF,&H00FFFFFF,&H00000000,&H64000000,0,0,0,0,100,100,0,0,"
         f"1,{st['outline']},0,2,{round(width * 0.05)},{round(width * 0.05)},{st['margin_v']},1",
+        f"Style: Card,Arial,{card_font},&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,1,0,0,0,100,100,2,0,"
+        f"1,0,0,5,{round(width * 0.06)},{round(width * 0.06)},0,1",
         "", "[Events]", "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
     events = [
         f"Dialogue: 0,{_ass_stamp(c.start)},{_ass_stamp(c.end)},Default,,0,0,0,,"
-        + "\\N".join(line.replace("{", "(").replace("}", ")") for line in c.lines)
+        + "\\N".join(_plain(line) for line in c.lines)
         for c in cues
     ]
+    if card is not None:
+        body = _plain(card.text)
+        if card.subtitle:
+            body += f"\\N{{\\fs{card_sub}\\b0\\alpha&H40&}}{_plain(card.subtitle)}"
+        events.append(f"Dialogue: 1,{_ass_stamp(card.start)},{_ass_stamp(card.end)},Card,,0,0,0,,"
+                      f"{{\\fad(700,0)}}{body}")
     return "\n".join(head + events) + "\n"
