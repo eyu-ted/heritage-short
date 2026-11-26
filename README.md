@@ -10,6 +10,8 @@ A 60-90 second film about my grandmother's Ethiopian coffee ceremony, narrated i
 >
 > Still open: the voice sounds "like reading" to all three listeners ([FAILURES F13](FAILURES.md)).
 
+**Watch the film:** [9:16 (vertical)](https://www.youtube.com/shorts/SjnmskgFBjo) · [16:9 (horizontal)](https://youtu.be/rD2WWXy8G6Q) · [Walkthrough (how it was built, one shot regenerated live)](https://drive.google.com/file/d/1EjD9-vuzIhLtWg7eoS284Ycmp5YzrJux/view?usp=sharing)
+
 The code was written with an AI coding assistant (Claude Code) under my direction.
 
 ## How it works
