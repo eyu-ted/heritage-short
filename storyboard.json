@@ -69,7 +69,7 @@
       "act": "prologue",
       "reason": "Establishing shot: where and when we are, and the slow pace of the morning.",
       "narration": {
-        "am": "ሁልጊዜ ጠዋት፣ ከተማዋ ከመንቃቷ በፊት፣ አያቴ ትኩስ ቄጠማ ትጎዘጉዝ ነበር።",
+        "am": "ሁልጊዜ ጠዋት፣ ከተማዋ ከመንቃቷ በፊት፣ አያቴ ትኩስ ቄጤማ ትጎዘጉዝ ነበር።",
         "en": "Every morning, before the city woke, my grandmother spread fresh grass on the floor."
       },
       "keyframe": {
@@ -261,7 +261,7 @@
           "pan": "none"
         }
       },
-      "min_duration_s": 8,
+      "min_duration_s": 6.5,
       "transition": "crossfade"
     },
     {
@@ -271,7 +271,7 @@
       "reason": "The human presence of the film, shown from behind to avoid any real likeness.",
       "narration": {
         "am": "ሦስት ዙሮች፤ አቦል፣ ቶና፣ እና በረካ፤ የበረከቱ ዙር።",
-        "en": "Three rounds: abol, tona, and baraka, the blessing."
+        "en": "Three rounds: abol, tona, and bereka, the blessing."
       },
       "keyframe": {
         "prompt": "Inside a warm, dim room with earthen walls and fresh grass strewn on the floor, a glowing charcoal brazier nearby: an elderly woman seen only from behind, seated on a low wooden stool, holding out a small white cup toward the viewer, soft warm backlight around her shawl, face not visible; the reference images give only the look of the objects; the setting is the room described, never a plain backdrop",
@@ -322,7 +322,7 @@
           "pan": "right"
         }
       },
-      "min_duration_s": 7,
+      "min_duration_s": 5.5,
       "transition": "crossfade"
     },
     {
@@ -376,9 +376,9 @@
   },
   "mix": {
     "duck": {
-      "threshold": 0.02,
-      "ratio": 6,
-      "attack_ms": 300,
+      "threshold": 0.01,
+      "ratio": 10,
+      "attack_ms": 100,
       "release_ms": 1500
     },
     "loudness": {
@@ -389,7 +389,14 @@
   },
   "endcard": {
     "text": "Made with AI",
-    "subtitle": "Buna - a Heritage Short",
-    "duration_s": 3
+    "subtitle": "Buna means coffee - a Heritage Short",
+    "duration_s": 4,
+    "fade_s": 2
+  },
+  "subtitles": {
+    "scale": 1.2,
+    "box": true,
+    "vertical_max_chars": 32,
+    "vertical_margin": 0.22
   }
 }

@@ -2,7 +2,13 @@
 
 A 60-90 second film about my grandmother's Ethiopian coffee ceremony, narrated in **Amharic** with **English subtitles** and an original score, made by a small pipeline in code. One file, [`storyboard.json`](storyboard.json), is the contract: every stage reads it and writes its outputs, and changing one line regenerates only what depends on it.
 
-> **Status (26 Nov 2026): work in progress.** Done: engine, provider smoke test, Amharic narration, radio cut, reference sheet, all 10 keyframes, Ken Burns motion, vertical animatic, the original score (ACE-Step 1.5, 3 candidates made on a free Colab T4; `score-seed22` chosen), and the **final edit in both formats** (83.1 s, -14.1 LUFS, -1.9 dBTP). Still open: the Wan clips for the 3 hero shots (s03, s07, s10). Kaggle never gave the runs a GPU, and the Colab runs are being fixed for a T4's memory ([FAILURES F12](FAILURES.md)). Until the clips arrive, those shots use Ken Burns stand-ins, and the manifest says so. See [IMPLEMENTATION.md](IMPLEMENTATION.md).
+> **Status (26 Nov 2026): complete.** The **final edit is done in both formats: 81.5 s, -14.2 LUFS, -1.9 dBTP.**
+> - Narration: Amharic, made with Gemini TTS.
+> - Pictures: 10 keyframes. Three hero shots (s03, s07, s10) have real motion from **Wan 2.2**, made on a free Colab T4 after Kaggle never gave the runs a GPU ([FAILURES F12](FAILURES.md)). The other seven use a Ken Burns pan/zoom.
+> - Music: an original score from ACE-Step 1.5 (`score-seed22`, [EXPERIMENTS E8](EXPERIMENTS.md)).
+> - Two user tests with three people each ([DESIGN §4-5](DESIGN.md)). Their feedback changed the storyboard: subtitles, ducking, end card, pacing and spelling.
+>
+> Still open: the voice sounds "like reading" to all three listeners ([FAILURES F13](FAILURES.md)).
 
 ## How it works
 
@@ -10,13 +16,14 @@ A 60-90 second film about my grandmother's Ethiopian coffee ceremony, narrated i
 storyboard.json  (validated by schema/storyboard.schema.json)
    ├─ narration   Gemini TTS, one Amharic WAV per shot           [done]
    ├─ keyframes   FLUX.2 klein-4b on Cloudflare Workers AI       [done]
-   ├─ shots       Wan 2.2 on Kaggle, or a Ken Burns pan/zoom     [Ken Burns done; Wan queued]
+   ├─ shots       Wan 2.2 on Kaggle/Colab, or a Ken Burns pan/zoom [done: Wan s03/s07/s10, Ken Burns 7]
    ├─ music       ACE-Step 1.5 on Kaggle/Colab                   [done: score-seed22]
    └─ assemble    FFmpeg: crossfades, duck, subtitles, measured mastering, end card, 9:16 + 16:9   [done]
 ```
 
 - **Cache by hash:** every output file is named by a hash of its inputs (prompt, model, voice, upstream file hashes). Unchanged inputs are never regenerated. See [`pipeline/cache.py`](pipeline/cache.py).
 - **Every model call is logged** to [`runs.jsonl`](runs.jsonl) (model, parameters, seed, latency, cost, attempt, errors); secrets are scrubbed.
+- **What it costs:** $0 spent. Every provider was used on its free tier (Gemini, Cloudflare Workers AI, Kaggle/Colab GPUs). At published paid prices the logged calls and GPU time would cost about $0.99, most of it the Wan clips (about 2 GPU-hours on a T4, including failed attempts). The binding limits were quotas and GPU access, not money. Measured per stage in [COSTS.md](COSTS.md).
 - **Failures are classified** (transient / quota / daily quota / bad input / out of memory) and retried only when retrying can help. See [`pipeline/retry.py`](pipeline/retry.py).
 
 ## Setup

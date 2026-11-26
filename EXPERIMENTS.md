@@ -100,3 +100,34 @@ Format: **hypothesis → change → result → decision**. One change at a time;
 - **Decision (provisional, by measurement; the owner can overrule it by ear):** `score-seed22`. Seeds 11 and 33 end before the film does, so the end card would sit in silence. Seed 22 is also the steadiest bed. It puts the most energy in the speech band, but the bed sits at -26 LUFS before mixing and is ducked under every line.
 - **Result:** both films were rebuilt with it: -14.1 LUFS, -1.9 dBTP. The speech passages measure -13.7 dB RMS and the music-only gap after s09 -16.2 dB, so the music still rises between lines as designed.
 - **Lesson:** the same prompt with different seeds gave different *structures* (where the piece ends), not just different textures. Measuring the ending took one script and would have been easy to miss by ear on a 90-second loop.
+
+## E9. Ducking: how far under the voice does the score really sit?
+- **Why:** in user test 2, two of three viewers said the music was too loud under the voice, in the first 20 s and at "Then came the fire" (DESIGN §5). E. said the same about the radio cut (§4). The film used the brief's suggested starting point (threshold 0.02, ratio 6, attack 300 ms, release 1500 ms) on a score levelled to -26 LUFS.
+- **Hypothesis:** those settings keep the score at least 12 dB under the voice in every line, so the complaint is about a few loud moments in the score, not the duck itself.
+- **Method:** the film's own audio graph (`radio.audio_graph`), rendered as two separate tracks, voice and ducked music. The RMS of each was measured over every narration line (0.2 s trimmed at each end), and the music level in the pauses between lines. One change per variant, the same score (`score-seed22`) and the same narration. Script: scratchpad `duck_exp.py`, 26 Nov.
+
+  | Variant | Change | Voice minus music, median | Worst line | Worst in first 20 s | Music in pauses |
+  |---|---|---|---|---|---|
+  | A (as shipped) | 0.02 / 6 / 300 ms, bed -26 LUFS | 12.9 dB | **9.3 dB (s08)** | 12.6 dB | -27.5 dBFS |
+  | B | threshold 0.01, ratio 10, attack 100 ms | **21.2 dB** | **17.3 dB** (s08) | 20.3 dB | -31.9 dBFS |
+  | C | bed -29 LUFS only | 15.9 dB | 12.3 dB | 15.6 dB | -30.5 dBFS |
+  | D | bed -29 LUFS + attack 100 ms | 17.7 dB | 14.1 dB | 17.1 dB | -31.1 dBFS |
+
+- **Result:** the hypothesis was **wrong**. At the suggested settings the score sat only 9.3 dB under the voice in s08 and 9.8 dB in s05. The listeners were hearing a real level problem, not a loud passage. A 300 ms attack lets the start of every line through before the duck takes hold. A deeper, faster duck (B) gained about 8 dB under every line. Lowering the whole score (C) gained only 3 dB and also made the pauses quieter.
+- **Decision:** B, in `storyboard.json` `mix.duck`. The score drops to about -32 dBFS in the pauses, against -27.5 before. That is still audible, and listeners wanted the voice to lead (D.: "the narration remains the main focus").
+- **Lesson:** a suggested default is a starting point. The brief says "tune by ear"; measuring the two tracks separately showed *where* the ear was right, line by line.
+
+## E10. What does real motion cost? Wan 2.2 on a free T4 vs a Ken Burns pan/zoom
+- **Question:** the brief offers Ken Burns as the fallback and Wan 2.2 TI2V-5B as the real thing. How much more does motion cost per shot, measured here?
+- **Hypothesis:** Wan costs at least 100x more compute per shot than Ken Burns, so it should be spent only where motion carries meaning (smoke, pouring, the door). That is why only s03, s07 and s10 were sent to Wan (PLAN §2.1).
+- **Measured** (`runs.jsonl` `stage: shots`; the Wan sidecars in `out (4).zip`, ingested 26 Nov):
+
+  | | Ken Burns (FFmpeg `zoompan`, local CPU) | Wan 2.2 TI2V-5B, 640 px, 30 steps (free Colab T4) |
+  |---|---|---|
+  | Time per shot | 6.0-10.7 s for a 6-9 s shot (12 renders) | **1313 s** of GPU per 5.04 s clip (denoise 827 s + decode 486 s), plus 355 s of text encoding once for all 3 and model loading |
+  | Per second of footage | about 1 s of CPU | about 260 s of GPU |
+  | Failure rate getting there | 0 | 6 failed Colab attempts before the 7th worked (FAILURES F12); 0 GPU hours from Kaggle in more than 15 h of queueing |
+  | What viewers said | D. (test 2, all Ken Burns): images "still for… 6-9 seconds… feel a little static"; D. and K. lost interest in the slow, still middle | not yet shown to viewers |
+
+- **Result:** about 130-200x more time per shot, so the hypothesis held. The real cost was not the GPU seconds but **getting a GPU at all**, plus six failed attempts to fit the model in 15 GB. A 5.04 s clip also has to fill a 6.5-7.5 s slot. The shot stage slows it down (at most `MAX_SLOWDOWN`) and holds the last frame (`pipeline/shots.py`). Shortening s07 from 8 to 6.5 s (user test 1) also reduced that stretch.
+- **Decision:** Wan for the three shots where motion *is* the meaning (s03 smoke, s07 the pour, s10 the door), Ken Burns for the other seven. **Not measured:** whether viewers notice the difference. A blind A/B of the Ken Burns and Wan versions of s07 with 5 people would answer it (open).

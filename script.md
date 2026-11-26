@@ -14,14 +14,14 @@ The narrator is her grandchild, remembering. Past habitual tense ("every morning
 
 | Shot | Round | English (subtitle) | Amharic (DRAFT, please correct) |
 |---|---|---|---|
-| s01 | prologue | Every morning, before the city woke, my grandmother spread fresh grass on the floor. | ሁልጊዜ ጠዋት፣ ከተማዋ ከመንቃቷ በፊት፣ አያቴ ትኩስ ቄጠማ ትጎዘጉዝ ነበር። |
+| s01 | prologue | Every morning, before the city woke, my grandmother spread fresh grass on the floor. | ሁልጊዜ ጠዋት፣ ከተማዋ ከመንቃቷ በፊት፣ አያቴ ትኩስ ቄጤማ ትጎዘጉዝ ነበር። *(26 Nov: was ቄጠማ; all 3 listeners in user test 2 chose ቄጤማ, DESIGN §5.)* |
 | s02 | prologue | She washed the green beans slowly. She never rushed coffee. | አረንጓዴውን ቡና ቀስ ብላ ታጥብ ነበር። ቡናን ፈጽሞ አታቻኩልም ነበር። |
 | s03 | abol | Then came the fire, and the smell that called the neighbours in. | ከዚያም እሳቱ ይነድ ነበር፤ ጎረቤቶችን የሚጠራው መዓዛም ይሸት ነበር። |
 | s04 | abol | Incense filled the room. It was her way of saying: welcome. | የዕጣኑ ጭስ ቤቱን ይሞላ ነበር። "እንኳን ደህና መጣችሁ" የምትልበት መንገዷ ነበር። |
 | s05 | abol | The sound of pounding was the first music of my day. *(26 Nov: was "grinding"; መውቀጥ is pounding with a mortar, which the picture shows. Raised in an AI-assisted review, DESIGN §5a.)* | የቡና መውቀጥ ድምፅ የቀኔ የመጀመሪያው ሙዚቃ ነበር። |
 | s06 | tona | Then we waited. She taught me that waiting is part of the gift. | ከዚያም እንጠብቅ ነበር። መጠበቅም የስጦታው አካል እንደሆነ አስተማረችኝ። |
 | s07 | tona | One pot. Many cups. No one was ever left out. | አንድ ጀበና። ብዙ ሲኒዎች። ማንም ቀርቶ አያውቅም። |
-| s08 | baraka | Three rounds: abol, tona, and baraka, the blessing. | ሦስት ዙሮች፤ አቦል፣ ቶና፣ እና በረካ፤ የበረከቱ ዙር። |
+| s08 | baraka | Three rounds: abol, tona, and bereka, the blessing. *(26 Nov: subtitle spelling was "baraka"; all 3 listeners chose "bereka", DESIGN §5.)* | ሦስት ዙሮች፤ አቦል፣ ቶና፣ እና በረካ፤ የበረከቱ ዙር። |
 | s09 | baraka | By the third cup, strangers had become family. | በሦስተኛው ሲኒ እንግዶች ቤተሰብ ይሆኑ ነበር። |
 | s10 | close | 'Stay a little longer,' she always said. 'The coffee is still warm.' | "ትንሽ ቆዩ" ትል ነበር፤ "ቡናው ገና ትኩስ ነው።" |
 

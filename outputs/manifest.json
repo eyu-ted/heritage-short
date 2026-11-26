@@ -2,87 +2,164 @@
   "stages": {
     "assemble": {
       "film_16x9": {
-        "hash": "cc5808f010a7",
+        "hash": "f82e4983c54f",
         "meta": {
-          "audio_ms": 9014,
-          "duration_s": 83.127,
+          "audio_ms": 5799,
+          "duration_s": 81.458,
           "fps": 24.0,
-          "lra": 4.4,
-          "lufs": -14.08,
+          "lra": 5.1,
+          "lufs": -14.17,
           "mastering": {
-            "attempts": 3,
-            "gain_db": 10.08,
+            "attempts": 2,
+            "gain_db": 9.63,
             "limit_dbfs": -2.0,
-            "master_lufs": -14.08,
-            "master_tp": -1.88,
-            "premix_lufs": -23.25,
-            "premix_tp": -1.43
+            "master_lufs": -14.17,
+            "master_tp": -1.82,
+            "premix_lufs": -23.05,
+            "premix_tp": -1.12
           },
           "music": "score-seed22",
           "problems": [],
-          "render_ms": 338921,
+          "render_ms": 62058,
           "shots": {
             "s01": "kenburns",
             "s02": "kenburns",
-            "s03": "kenburns",
+            "s03": "wan",
             "s04": "kenburns",
             "s05": "kenburns",
             "s06": "kenburns",
-            "s07": "kenburns",
+            "s07": "wan",
             "s08": "kenburns",
             "s09": "kenburns",
-            "s10": "kenburns"
+            "s10": "wan"
           },
           "size": [
             1920,
             1080
           ],
-          "true_peak_dbtp": -1.88
+          "true_peak_dbtp": -1.85
         },
-        "path": "outputs/assemble/film_16x9__cc5808f010a7.mp4",
-        "produced_at": "2026-11-26T12:43:06+00:00",
+        "path": "outputs/assemble/film_16x9__f82e4983c54f.mp4",
+        "produced_at": "2026-11-26T14:11:54+00:00",
         "status": "ok"
       },
       "film_9x16": {
-        "hash": "abf8dc622407",
+        "hash": "0a2e80434cd3",
         "meta": {
-          "audio_ms": 9014,
-          "duration_s": 83.127,
+          "audio_ms": 5799,
+          "duration_s": 81.458,
           "fps": 24.0,
-          "lra": 4.4,
-          "lufs": -14.08,
+          "lra": 5.1,
+          "lufs": -14.17,
           "mastering": {
-            "attempts": 3,
-            "gain_db": 10.08,
+            "attempts": 2,
+            "gain_db": 9.63,
             "limit_dbfs": -2.0,
-            "master_lufs": -14.08,
-            "master_tp": -1.88,
-            "premix_lufs": -23.25,
-            "premix_tp": -1.43
+            "master_lufs": -14.17,
+            "master_tp": -1.82,
+            "premix_lufs": -23.05,
+            "premix_tp": -1.12
           },
           "music": "score-seed22",
           "problems": [],
-          "render_ms": 421524,
+          "render_ms": 61116,
           "shots": {
             "s01": "kenburns",
             "s02": "kenburns",
-            "s03": "kenburns",
+            "s03": "wan",
             "s04": "kenburns",
             "s05": "kenburns",
             "s06": "kenburns",
-            "s07": "kenburns",
+            "s07": "wan",
             "s08": "kenburns",
             "s09": "kenburns",
-            "s10": "kenburns"
+            "s10": "wan"
           },
           "size": [
             1080,
             1920
           ],
-          "true_peak_dbtp": -1.88
+          "true_peak_dbtp": -1.85
         },
-        "path": "outputs/assemble/film_9x16__abf8dc622407.mp4",
-        "produced_at": "2026-11-26T12:37:25+00:00",
+        "path": "outputs/assemble/film_9x16__0a2e80434cd3.mp4",
+        "produced_at": "2026-11-26T14:10:51+00:00",
+        "status": "ok"
+      }
+    },
+    "clips": {
+      "s03": {
+        "hash": "5a447aa12cb7",
+        "meta": {
+          "duration_s": 5.042,
+          "finished_at": "2026-11-26T13:44:09+00:00",
+          "gpu": "Tesla T4",
+          "gpu_seconds": 1313.1,
+          "settings": {
+            "fps": 24,
+            "frames": 121,
+            "guidance": 5.0,
+            "size": 640,
+            "steps": 30
+          },
+          "versions": {
+            "diffusers": "0.43.0",
+            "python": "3.13.16",
+            "torch": "2.14.1+cu130",
+            "transformers": "5.22.1"
+          }
+        },
+        "path": "outputs/clips/s03__5a447aa12cb7.mp4",
+        "produced_at": "2026-11-26T14:08:38+00:00",
+        "status": "ok"
+      },
+      "s07": {
+        "hash": "d57f16b275ed",
+        "meta": {
+          "duration_s": 5.042,
+          "finished_at": "2026-11-26T13:52:14+00:00",
+          "gpu": "Tesla T4",
+          "gpu_seconds": 1310.9,
+          "settings": {
+            "fps": 24,
+            "frames": 121,
+            "guidance": 5.0,
+            "size": 640,
+            "steps": 30
+          },
+          "versions": {
+            "diffusers": "0.43.0",
+            "python": "3.13.16",
+            "torch": "2.14.1+cu130",
+            "transformers": "5.22.1"
+          }
+        },
+        "path": "outputs/clips/s07__d57f16b275ed.mp4",
+        "produced_at": "2026-11-26T14:08:38+00:00",
+        "status": "ok"
+      },
+      "s10": {
+        "hash": "bebec82056da",
+        "meta": {
+          "duration_s": 5.042,
+          "finished_at": "2026-11-26T14:00:21+00:00",
+          "gpu": "Tesla T4",
+          "gpu_seconds": 1315.4,
+          "settings": {
+            "fps": 24,
+            "frames": 121,
+            "guidance": 5.0,
+            "size": 640,
+            "steps": 30
+          },
+          "versions": {
+            "diffusers": "0.43.0",
+            "python": "3.13.16",
+            "torch": "2.14.1+cu130",
+            "transformers": "5.22.1"
+          }
+        },
+        "path": "outputs/clips/s10__bebec82056da.mp4",
+        "produced_at": "2026-11-26T14:08:38+00:00",
         "status": "ok"
       }
     },
@@ -305,17 +382,17 @@
     },
     "narration": {
       "s01": {
-        "hash": "462029f444fb",
+        "hash": "4744d6c9e141",
         "meta": {
-          "c2pa": "outputs/narration/s01__462029f444fb.c2pa",
+          "c2pa": "outputs/narration/s01__4744d6c9e141.c2pa",
           "c2pa_bytes": 7656,
-          "duration_s": 8.171,
+          "duration_s": 8.491,
           "mode": "single",
           "sample_rate": 24000,
           "voice": "Sulafat"
         },
-        "path": "outputs/narration/s01__462029f444fb.wav",
-        "produced_at": "2026-11-25T10:56:21+00:00",
+        "path": "outputs/narration/s01__4744d6c9e141.wav",
+        "produced_at": "2026-11-26T14:07:04+00:00",
         "status": "ok"
       },
       "s02": {
@@ -557,14 +634,14 @@
     },
     "shots": {
       "s01": {
-        "hash": "96b7ea95db66",
+        "hash": "f20258783576",
         "meta": {
-          "duration_s": 9.171,
+          "duration_s": 9.491,
           "render": "kenburns",
-          "render_ms": 9572
+          "render_ms": 11893
         },
-        "path": "outputs/shots/s01__96b7ea95db66.mp4",
-        "produced_at": "2026-11-25T18:05:53+00:00",
+        "path": "outputs/shots/s01__f20258783576.mp4",
+        "produced_at": "2026-11-26T14:09:15+00:00",
         "status": "ok"
       },
       "s02": {
@@ -581,15 +658,15 @@
       "s03": {
         "hash": "34e1906cffaf",
         "meta": {
+          "clip": "outputs/clips/s03__5a447aa12cb7.mp4",
           "duration_s": 8.451,
-          "fallback_hash": "2322184f5bfa",
-          "reason": "wan clip not ingested yet",
-          "render": "kenburns",
-          "render_ms": 8484
+          "render": "wan",
+          "render_ms": 7833,
+          "slowdown": 1.676
         },
-        "path": "outputs/shots/s03__34e1906cffaf-kenburns.mp4",
-        "produced_at": "2026-11-25T18:06:10+00:00",
-        "status": "fallback"
+        "path": "outputs/shots/s03__34e1906cffaf.mp4",
+        "produced_at": "2026-11-26T14:09:23+00:00",
+        "status": "ok"
       },
       "s04": {
         "hash": "f5cdeb6a556e",
@@ -625,17 +702,17 @@
         "status": "ok"
       },
       "s07": {
-        "hash": "e067a4f0da89",
+        "hash": "52717a36b7b3",
         "meta": {
-          "duration_s": 8.0,
-          "fallback_hash": "5d7daaec9229",
-          "reason": "wan clip not ingested yet",
-          "render": "kenburns",
-          "render_ms": 5471
+          "clip": "outputs/clips/s07__d57f16b275ed.mp4",
+          "duration_s": 6.5,
+          "render": "wan",
+          "render_ms": 5406,
+          "slowdown": 1.289
         },
-        "path": "outputs/shots/s07__e067a4f0da89-kenburns.mp4",
-        "produced_at": "2026-11-25T17:58:57+00:00",
-        "status": "fallback"
+        "path": "outputs/shots/s07__52717a36b7b3.mp4",
+        "produced_at": "2026-11-26T14:09:28+00:00",
+        "status": "ok"
       },
       "s08": {
         "hash": "6c753d74e863",
@@ -649,28 +726,28 @@
         "status": "ok"
       },
       "s09": {
-        "hash": "fea7cb769098",
+        "hash": "676b62c9cc66",
         "meta": {
-          "duration_s": 7.0,
+          "duration_s": 5.5,
           "render": "kenburns",
-          "render_ms": 7861
+          "render_ms": 6916
         },
-        "path": "outputs/shots/s09__fea7cb769098.mp4",
-        "produced_at": "2026-11-25T11:57:21+00:00",
+        "path": "outputs/shots/s09__676b62c9cc66.mp4",
+        "produced_at": "2026-11-26T14:09:35+00:00",
         "status": "ok"
       },
       "s10": {
         "hash": "0de4b29b37cc",
         "meta": {
+          "clip": "outputs/clips/s10__bebec82056da.mp4",
           "duration_s": 8.0,
-          "fallback_hash": "ba99aecfe8c4",
-          "reason": "wan clip not ingested yet",
-          "render": "kenburns",
-          "render_ms": 5689
+          "render": "wan",
+          "render_ms": 8071,
+          "slowdown": 1.587
         },
-        "path": "outputs/shots/s10__0de4b29b37cc-kenburns.mp4",
-        "produced_at": "2026-11-25T17:59:02+00:00",
-        "status": "fallback"
+        "path": "outputs/shots/s10__0de4b29b37cc.mp4",
+        "produced_at": "2026-11-26T14:09:43+00:00",
+        "status": "ok"
       }
     }
   },

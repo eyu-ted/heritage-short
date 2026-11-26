@@ -82,12 +82,13 @@ def jobs(sb: dict[str, Any], manifest: Manifest) -> list[Job]:
         "parts": parts,
         "music": hash_file(music_path) if music_path else (None if key else f"placeholder:{radio.PAD_EXPR}"),
         "subtitles": [s["narration"]["en"] for s in shots_in_order(sb)],
+        "subtitle_look": sb.get("subtitles"),
         "mix": sb["mix"],
         "endcard": sb["endcard"],
         "reframe": sb["project"]["reframe"],
         "fps": sb["render"]["fps"],
         "crossfade_s": sb["render"]["crossfade_s"],
-        "fade_to_black_s": FADE_TO_BLACK_S,
+        "fade_to_black_s": float(sb["endcard"].get("fade_s", FADE_TO_BLACK_S)),
         "mastering": {"voice": VOICE_COMPRESSOR, "aac_headroom_db": AAC_HEADROOM_DB,
                       "limiter_margin_db": LIMITER_MARGIN_DB, "tolerance": LOUDNESS_TOLERANCE},
         "encode": ENCODE,
@@ -182,7 +183,10 @@ def render(ctx: Context, job: Job, slots: list[timeline.Slot], total: float, sho
     card = subtitles.Card(round(total - card_s + 0.2, 3), total, ctx.sb["endcard"]["text"],
                           ctx.sb["endcard"].get("subtitle", ""))
     ass = f"{job.key}.ass"
-    (tmp / ass).write_text(subtitles.to_ass(subtitles.cues_for(slots), w, h, card), encoding="utf-8")
+    look = subtitles.look_for(ctx.sb.get("subtitles"), w, h)
+    (tmp / ass).write_text(subtitles.to_ass(subtitles.cues_for(slots, look["max_chars"]), w, h, card,
+                                            scale=look["scale"], box=look["box"],
+                                            vertical_margin=look["vertical_margin"]), encoding="utf-8")
 
     args: list[str] = []
     for slot in slots:

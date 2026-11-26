@@ -192,7 +192,20 @@
       "properties": {
         "text": { "type": "string", "minLength": 3 },
         "subtitle": { "type": "string" },
-        "duration_s": { "type": "number", "minimum": 2, "maximum": 4 }
+        "duration_s": { "type": "number", "minimum": 2, "maximum": 4 },
+        "fade_s": { "type": "number", "minimum": 0.5, "maximum": 3, "description": "fade from the last shot to the black card" }
+      }
+    },
+
+    "subtitles": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Burned-in subtitle look (user test 2: too small, no background, too low). Optional; defaults are the original look.",
+      "properties": {
+        "scale": { "type": "number", "minimum": 0.8, "maximum": 1.6 },
+        "box": { "type": "boolean", "description": "semi-transparent dark box behind the text" },
+        "vertical_max_chars": { "type": "integer", "minimum": 24, "maximum": 40, "description": "line length in 9:16, so bigger text still fits" },
+        "vertical_margin": { "type": "number", "minimum": 0.1, "maximum": 0.35, "description": "bottom margin as a share of the 9:16 frame height" }
       }
     }
   },
