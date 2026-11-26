@@ -10,6 +10,8 @@ A 60-90 second film about my grandmother's Ethiopian coffee ceremony, narrated i
 >
 > Still open: the voice sounds "like reading" to all three listeners ([FAILURES F13](FAILURES.md)).
 
+The code was written with an AI coding assistant (Claude Code) under my direction.
+
 ## How it works
 
 ```

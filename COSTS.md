@@ -1,6 +1,6 @@
 # COSTS: what the film cost, from the logs
 
-Generated 2026-11-26T14:12:27+00:00 by `python -m pipeline costs` from `runs.jsonl` (299 lines, 299 events, 0 unreadable; 29 runs, 2026-11-25T09:07Z to 2026-11-26T14:11Z). Re-run the command to refresh it; every number below except the list prices is computed from the log.
+Generated 2026-11-26T14:20:19+00:00 by `python -m pipeline costs` from `runs.jsonl` (299 lines, 299 events, 0 unreadable; 29 runs, 2026-11-25T09:07Z to 2026-11-26T14:11Z). Re-run the command to refresh it; every number below except the list prices is computed from the log.
 
 ## Headline
 
@@ -75,6 +75,10 @@ The bigger saving is quota, not money: Gemini's free tier allowed about 10 TTS r
 | kaggle | other | 2 |
 
 Failed API requests are assumed unbilled. The causes and fixes are in FAILURES.md.
+
+## Frontier comparison
+
+Not done. The frontier image, video and music models (Omni Flash, Nano Banana, Lyria 3.5) need paid API billing, which this project did not have. Chat subscriptions do not give the pipeline API access, so no frontier call could be made, logged or compared. Every model in the film is free-tier or open-weight.
 
 ## Prices used for the estimate
 

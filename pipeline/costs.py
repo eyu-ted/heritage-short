@@ -387,6 +387,13 @@ def build_report(events: list[dict[str, Any]], *, line_count: int, bad_lines: in
         w("No errors logged.")
     w("")
 
+    w("## Frontier comparison")
+    w("")
+    w("Not done. The frontier image, video and music models (Omni Flash, Nano Banana, Lyria 3.5) need paid "
+      "API billing, which this project did not have. Chat subscriptions do not give the pipeline API access, "
+      "so no frontier call could be made, logged or compared. Every model in the film is free-tier or open-weight.")
+    w("")
+
     w("## Prices used for the estimate")
     w("")
     w(f"All checked {PRICES_CHECKED}. These are list-price **equivalents** for a paid plan, not money spent.")
